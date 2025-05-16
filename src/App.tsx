@@ -8,6 +8,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import L, { type LatLngExpression } from "leaflet";
+import { getDisplayDateTime } from "./utils/getDisplayDate";
 
 const blueIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -31,7 +32,7 @@ const redDot = L.divIcon({
 export default function App() {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [data, setData] = useState<
-    { speed: number; lat: number; long: number }[]
+    { speed: number; lat: number; long: number; createdAt: string }[]
   >([]);
 
   const get = async () => {
@@ -80,7 +81,8 @@ export default function App() {
             >
               <Popup>
                 Reading #{i + 1} <br />
-                Speed: {data[i]?.speed} km/h
+                Speed: {data[i]?.speed} km/h <br />
+                Time: {getDisplayDateTime(data[i]?.createdAt)}
               </Popup>
             </Marker>
           ))}
