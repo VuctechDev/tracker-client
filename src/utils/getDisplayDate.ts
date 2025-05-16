@@ -31,20 +31,20 @@ export const getDisplayTime = (time?: string) => {
   return `${hours}:${minutes}:${seconds}`;
 };
 
-const months = [
-  "january",
-  "february",
-  "march",
-  "april",
-  "may",
-  "june",
-  "july",
-  "august",
-  "september",
-  "october",
-  "november",
-  "december",
-];
+// const months = [
+//   "january",
+//   "february",
+//   "march",
+//   "april",
+//   "may",
+//   "june",
+//   "july",
+//   "august",
+//   "september",
+//   "october",
+//   "november",
+//   "december",
+// ];
 
 // export const getStatsPeriod = (period: string): string => {
 //   const month = months[+period.split("-")[1] - 1];
