@@ -11,7 +11,7 @@ export const formatNumber = (value: number): string => {
 };
 
 export const getDisplayDateTime = (time?: string) => {
-  const d = time ? new Date(getFromUTC(time)) : new Date();
+  const d = time ? new Date(time) : new Date();
   const date = formatNumber(d.getDate());
   const month = formatNumber(d.getMonth() + 1);
   const year = formatNumber(d.getFullYear());
