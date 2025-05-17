@@ -34,6 +34,18 @@ export default function App() {
   const [data, setData] = useState<
     { speed: number; lat: number; long: number; createdAt: string }[]
   >([]);
+  const [devices, setDevices] = useState<
+    {
+      id: number;
+      imei: string;
+      code: string;
+      battery: number;
+      signal: number;
+      version: number;
+      status: "static" | "dynamic";
+      createdAt: string;
+    }[]
+  >([]);
 
   const get = async () => {
     const res = await fetch(
@@ -42,9 +54,17 @@ export default function App() {
     const data = await res.json();
     setData(data.data);
   };
+  const getDevices = async () => {
+    const res = await fetch(
+      "https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/devices"
+    );
+    const data = await res.json();
+    setDevices(data.data);
+  };
 
   useEffect(() => {
     get();
+    getDevices();
     const int = setInterval(() => get(), 10000);
     return () => {
       clearInterval(int);
@@ -60,36 +80,56 @@ export default function App() {
   }, [data]);
 
   return (
-    <div style={{ height: "100vh", width: "1200px" }}>
-      {route.length && (
-        <MapContainer
-          center={route[0] ?? [0, 0]}
-          zoom={14}
-          scrollWheelZoom={true}
-          style={{ height: "100%", width: "100%" }}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+    <div style={{ height: "100vh", width: "1300px", display: "flex" }}>
+      <div style={{ height: "100vh", width: "1000px" }}>
+        {route.length && (
+          <MapContainer
+            center={route[0] ?? [0, 0]}
+            zoom={14}
+            scrollWheelZoom={true}
+            style={{ height: "100%", width: "100%" }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
 
-          {route.map((position, i) => (
-            <Marker
-              key={i}
-              position={position}
-              icon={i === 0 ? blueIcon : redDot}
-            >
-              <Popup>
-                Reading #{i + 1} <br />
-                Speed: {data[i]?.speed} km/h <br />
-                Time: {getDisplayDateTime(data[i]?.createdAt)}
-              </Popup>
-            </Marker>
-          ))}
+            {route.map((position, i) => (
+              <Marker
+                key={i}
+                position={position}
+                icon={i === 0 ? blueIcon : redDot}
+              >
+                <Popup>
+                  Reading #{i + 1} <br />
+                  Speed: {data[i]?.speed} km/h <br />
+                  Time: {getDisplayDateTime(data[i]?.createdAt)}
+                </Popup>
+              </Marker>
+            ))}
 
-          {route.length > 1 && <Polyline positions={route} color="orange" />}
-        </MapContainer>
-      )}
+            {route.length > 1 && <Polyline positions={route} color="orange" />}
+          </MapContainer>
+        )}
+      </div>
+      <div style={{ width: "300px" }}>
+        {devices.map((item) => (
+          <div
+            key={item.id}
+            style={{
+              width: "400px",
+              margin: "15px 12px",
+              padding: "0px 12px",
+              border: "2px solid black",
+              borderRadius: "6px",
+            }}
+          >
+            <p>IMEI: {item.imei}</p>
+            <p>Batery: {item.battery}%</p> <p>Signal: {item.signal}%</p>
+            <p>Status: {item.status?.toUpperCase()}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
