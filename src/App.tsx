@@ -28,7 +28,18 @@ const redDot = L.divIcon({
   iconSize: [10, 10],
   iconAnchor: [5, 5],
 });
-
+const orangeDot = L.divIcon({
+  className: "",
+  html: `<div style="
+    background-color: green;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    box-shadow: 0 0 2px rgba(0,0,0,0.5);
+  "></div>`,
+  iconSize: [10, 10],
+  iconAnchor: [5, 5],
+});
 export default function App() {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [data, setData] = useState<
@@ -105,19 +116,44 @@ export default function App() {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {route.map((position, i) => (
-              <Marker
-                key={i}
-                position={position}
-                icon={i === 0 ? blueIcon : redDot}
-              >
-                <Popup>
-                  Reading #{i + 1} <br />
-                  Speed: {data[i]?.speed} km/h <br />
-                  Time: {getDisplayDateTime(data[i]?.createdAt)}
-                </Popup>
-              </Marker>
-            ))}
+            {route.map((position, i) => {
+              const curr = data[i];
+              const prev = data[i + 1];
+
+              const currTime = new Date(curr?.createdAt || 0).getTime();
+              const prevTime = new Date(prev?.createdAt || 0).getTime();
+
+              const diffMs = Math.abs(currTime - prevTime);
+              const isTimeGap = i > 0 && diffMs > 60_000 && prev;
+
+              const icon = i === 0 ? blueIcon : isTimeGap ? orangeDot : redDot;
+
+              const hours = Math.floor(diffMs / 3600000);
+              const minutes = Math.floor((diffMs % 3600000) / 60000);
+              const seconds = Math.floor((diffMs % 60000) / 1000);
+
+              const displayTime =
+                isTimeGap &&
+                `${String(hours).padStart(2, "0")}h ${String(minutes).padStart(
+                  2,
+                  "0"
+                )}m ${String(seconds).padStart(2, "0")}s`;
+              return (
+                <Marker key={i} position={position} icon={icon}>
+                  <Popup>
+                    Reading #{i + 1} <br />
+                    Speed: {data[i]?.speed} km/h <br />
+                    Time: {getDisplayDateTime(data[i]?.createdAt)}
+                    {isTimeGap && (
+                      <>
+                        <br />
+                        Pause: {displayTime}
+                      </>
+                    )}
+                  </Popup>
+                </Marker>
+              );
+            })}
 
             {route.length > 1 && <Polyline positions={route} color="orange" />}
           </MapContainer>
