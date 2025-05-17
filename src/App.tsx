@@ -49,7 +49,7 @@ export default function App() {
 
   const get = async () => {
     const res = await fetch(
-      "https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/data"
+      `https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/data`
     );
     const data = await res.json();
     setData(data.data);
@@ -71,6 +71,17 @@ export default function App() {
     };
   }, []);
 
+  // useEffect(() => {
+  //   if(devices.length) {
+  //     get();
+  //     const int = setInterval(() => get(), 10000);
+  //     return () => {
+  //       clearInterval(int);
+  //     };
+  //   }
+
+  // }, [devices]);
+
   useEffect(() => {
     setRoute(() =>
       data.map((item) => {
@@ -80,9 +91,9 @@ export default function App() {
   }, [data]);
 
   return (
-    <div style={{ height: "100vh", width: "1300px", display: "flex" }}>
-      <div style={{ height: "100vh", width: "1000px" }}>
-        {route.length && (
+    <div className="wrapper">
+      <div className="mapWrapper">
+        {!!route.length && (
           <MapContainer
             center={route[0] ?? [0, 0]}
             zoom={14}
@@ -112,20 +123,11 @@ export default function App() {
           </MapContainer>
         )}
       </div>
-      <div style={{ width: "300px" }}>
+      <div className="devicesCardWrapper">
         {devices.map((item) => (
-          <div
-            key={item.id}
-            style={{
-              width: "400px",
-              margin: "15px 12px",
-              padding: "0px 12px",
-              border: "2px solid black",
-              borderRadius: "6px",
-            }}
-          >
+          <div key={item.id} className="devicesCard">
             <p>IMEI: {item.imei}</p>
-            <p>Batery: {item.battery}%</p> <p>Signal: {item.signal}%</p>
+            <p>Battery: {item.battery}%</p> <p>Signal: {item.signal}%</p>
             <p>Status: {item.status?.toUpperCase()}</p>
           </div>
         ))}

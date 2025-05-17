@@ -66,11 +66,69 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
- 
+* {
+  box-sizing: border-box;
+}
+html {
+  width: 100%;
+}
+
 body {
+  width: 100%;
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+}
+.mapWrapper {
+  width: 1000px;
+  height: 100vh;
+}
+.devicesCardWrapper {
+  box-sizing: border-box;
+  padding: 12px;
+  width: calc(100vw - 1050px);
+}
+
+.devicesCard {
+  padding: 2px 12px;
+  width: 100%;
+  margin: 15px 0px;
+  border: 2px solid black;
+  border-radius: 6px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.devicesCard > p {
+  margin: 4px 0px;
+}
+
+.devicesCard:hover {
+  background-color: #f9f9f9;
+}
+
+@media (max-width: 600px) {
+  .wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+  }
+  .mapWrapper {
+    width: 100vw;
+    height: 70vh;
+  }
+  .devicesCardWrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
 }
