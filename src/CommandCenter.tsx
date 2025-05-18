@@ -100,6 +100,22 @@ const CommandCenter: FC<Props> = ({ id }) => {
       >
         RESTART
       </button>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          sendCommand("01", "49");
+        }}
+      >
+        UPALI ZVUK
+      </button>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          sendCommand("00", "49");
+        }}
+      >
+        UGASI ZVUK
+      </button>
     </div>
   );
 };
