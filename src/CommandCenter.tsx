@@ -47,7 +47,7 @@ const CommandCenter: FC<Props> = ({ id }) => {
   };
 
   const sendCommand = async (value: string, code: string) => {
-    await fetch(`http://localhost:2302/devices/command/${id}`, {
+    await fetch(`https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/devices/command/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
