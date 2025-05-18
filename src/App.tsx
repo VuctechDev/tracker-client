@@ -9,6 +9,7 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import L, { type LatLngExpression } from "leaflet";
 import { getDisplayDateTime } from "./utils/getDisplayDate";
+import CommandCenter from "./CommandCenter";
 
 const blueIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -176,6 +177,7 @@ export default function App() {
             <p>Battery: {item.battery}%</p> <p>Signal: {item.signal}%</p>
             <p>Status: {item.status?.toUpperCase()}</p>
             <p>Version: {item.version}</p>
+            <CommandCenter id={item.imei} />
           </div>
         ))}
       </div>
