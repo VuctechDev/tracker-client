@@ -57,10 +57,11 @@ export default function App() {
       createdAt: string;
     }[]
   >([]);
+  const [deviceId, setDeviceId] = useState<string>("");
 
   const get = async () => {
     const res = await fetch(
-      `https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/data`
+      `https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/data/${deviceId}`
     );
     const data = await res.json();
     setData(data.data);
@@ -74,24 +75,24 @@ export default function App() {
   };
 
   useEffect(() => {
-    get();
     getDevices();
-    const int = setInterval(() => get(), 10000);
-    return () => {
-      clearInterval(int);
-    };
   }, []);
 
-  // useEffect(() => {
-  //   if(devices.length) {
-  //     get();
-  //     const int = setInterval(() => get(), 10000);
-  //     return () => {
-  //       clearInterval(int);
-  //     };
-  //   }
+  useEffect(() => {
+    if (devices.length) {
+      setDeviceId(devices[0]?.imei);
+    }
+  }, [devices]);
 
-  // }, [devices]);
+  useEffect(() => {
+    if (deviceId) {
+      get();
+      const int = setInterval(() => get(), 10000);
+      return () => {
+        clearInterval(int);
+      };
+    }
+  }, [deviceId]);
 
   useEffect(() => {
     setRoute(() =>
@@ -100,6 +101,8 @@ export default function App() {
       })
     );
   }, [data]);
+
+  const selectDevice = (id: string) => setDeviceId(id);
 
   return (
     <div className="wrapper">
@@ -161,7 +164,12 @@ export default function App() {
       </div>
       <div className="devicesCardWrapper">
         {devices.map((item) => (
-          <div key={item.id} className="devicesCard">
+          <div
+            key={item.id}
+            className="devicesCard"
+            onClick={() => selectDevice(item.imei)}
+            style={{backgroundColor: deviceId === item.imei ? "#a5efbf" : "#fff"}}
+          >
             <p>IMEI: {item.imei}</p>
             <p>Battery: {item.battery}%</p> <p>Signal: {item.signal}%</p>
             <p>Status: {item.status?.toUpperCase()}</p>
