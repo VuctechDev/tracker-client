@@ -47,17 +47,20 @@ const CommandCenter: FC<Props> = ({ id }) => {
   };
 
   const sendCommand = async (value: string, code: string) => {
-    await fetch(`https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/devices/command/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer your_token_here",
-      },
-      body: JSON.stringify({
-        value,
-        code,
-      }),
-    });
+    await fetch(
+      `https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/devices/command/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer your_token_here",
+        },
+        body: JSON.stringify({
+          value,
+          code,
+        }),
+      }
+    );
   };
 
   return (
@@ -88,6 +91,14 @@ const CommandCenter: FC<Props> = ({ id }) => {
         }}
       >
         80
+      </button>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          sendCommand("", "48");
+        }}
+      >
+        RESTART
       </button>
     </div>
   );
