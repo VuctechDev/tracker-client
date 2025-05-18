@@ -168,11 +168,14 @@ export default function App() {
             key={item.id}
             className="devicesCard"
             onClick={() => selectDevice(item.imei)}
-            style={{backgroundColor: deviceId === item.imei ? "#a5efbf" : "#fff"}}
+            style={{
+              backgroundColor: deviceId === item.imei ? "#a5efbf" : "#fff",
+            }}
           >
             <p>IMEI: {item.imei}</p>
             <p>Battery: {item.battery}%</p> <p>Signal: {item.signal}%</p>
             <p>Status: {item.status?.toUpperCase()}</p>
+            <p>Version: {item.version}</p>
           </div>
         ))}
       </div>
