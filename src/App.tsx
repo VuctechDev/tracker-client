@@ -175,6 +175,7 @@ export default function App() {
               backgroundColor: deviceId === item.imei ? "#a5efbf" : "#fff",
             }}
           >
+            <h3>Device: {item.name}</h3>
             <p>IMEI: {item.imei}</p>
             <p>Battery: {item.battery}%</p> <p>Signal: {item.signal}%</p>
             <p>Status: {item.status?.toUpperCase()}</p>

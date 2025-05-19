@@ -110,6 +110,9 @@ body {
 .devicesCard > p {
   margin: 4px 0px;
 }
+.devicesCard > h3 {
+  margin: 6px 0px;
+}
 
 .devicesCard button {
   margin: 6px 5px;
