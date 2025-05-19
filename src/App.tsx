@@ -179,12 +179,15 @@ export default function App() {
             <p>Battery: {item.battery}%</p> <p>Signal: {item.signal}%</p>
             <p>Status: {item.status?.toUpperCase()}</p>
             <p>Version: {item.version}</p>
-            <CommandCenter
-              id={item.imei}
-              value={
-                devices.find((item) => item.imei === deviceId)?.interval ?? "60"
-              }
-            />
+            {item.status !== "offline" && (
+              <CommandCenter
+                id={item.imei}
+                value={
+                  devices.find((device) => item.imei === device.imei)
+                    ?.interval ?? "60"
+                }
+              />
+            )}
           </div>
         ))}
       </div>

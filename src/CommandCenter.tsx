@@ -29,6 +29,7 @@ const config = [
 ];
 
 const CommandCenter: FC<Props> = ({ id, value }) => {
+  console.log(value);
   const sendCommand = async (value: string, code: string) => {
     await fetch(
       `https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/devices/command/${id}`,
