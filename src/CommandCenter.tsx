@@ -2,6 +2,7 @@ import type { FC } from "react";
 
 interface Props {
   id: string;
+  value: string;
 }
 
 const config = [
@@ -27,25 +28,7 @@ const config = [
   },
 ];
 
-const CommandCenter: FC<Props> = ({ id }) => {
-  const handleChange = async (value: string) => {
-    console.log(value);
-    await fetch(
-      `https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/devices/interval/${id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer your_token_here",
-        },
-        body: JSON.stringify({
-          value: value,
-          code: "97",
-        }),
-      }
-    );
-  };
-
+const CommandCenter: FC<Props> = ({ id, value }) => {
   const sendCommand = async (value: string, code: string) => {
     await fetch(
       `https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/devices/command/${id}`,
@@ -68,12 +51,12 @@ const CommandCenter: FC<Props> = ({ id }) => {
       <div style={{ display: "flex", alignItems: "center" }}>
         <p>Interval: </p>
         <select
-          defaultValue={10}
+          defaultValue={parseInt(value)}
           onClick={(e) => {
             e.stopPropagation();
           }}
           onChange={(e) => {
-            handleChange(e.target.value);
+            sendCommand(e.target.value, "97");
           }}
           className="select-custom"
         >

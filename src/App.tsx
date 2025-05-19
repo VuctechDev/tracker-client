@@ -54,7 +54,9 @@ export default function App() {
       battery: number;
       signal: number;
       version: number;
-      status: "static" | "dynamic";
+      status: "static" | "dynamic" | "offline";
+      interval: string;
+      name: string;
       createdAt: string;
     }[]
   >([]);
@@ -177,7 +179,12 @@ export default function App() {
             <p>Battery: {item.battery}%</p> <p>Signal: {item.signal}%</p>
             <p>Status: {item.status?.toUpperCase()}</p>
             <p>Version: {item.version}</p>
-            <CommandCenter id={item.imei} />
+            <CommandCenter
+              id={item.imei}
+              value={
+                devices.find((item) => item.imei === deviceId)?.interval ?? "60"
+              }
+            />
           </div>
         ))}
       </div>
