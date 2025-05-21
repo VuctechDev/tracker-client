@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "private": false,
+  "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -14,9 +14,7 @@
     "leaflet": "^1.9.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-leaflet": "^5.0.0",
-    "react-router": "^6.22.3",
-    "react-router-dom": "^6.22.3"
+    "react-leaflet": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

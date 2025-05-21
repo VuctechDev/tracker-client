@@ -1,16 +1,19 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 import Home from "./Home";
-import Logs from "./Logs"; // <-- Add this new component
+import Logs from "./Logs"; 
 
 export default function App() {
+  const [page, setPage] = useState("home");
   return (
-    <Router>
-      <div className="wrapper">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/logs/:imei" element={<Logs />} />
-        </Routes>
+    <>
+      <div style={{ display: "flex", columnGap: "10px", padding: "10px" }}>
+        <button onClick={() => setPage("home")}>HOME</button>
+        <button onClick={() => setPage("logs")}>LOGS</button>
       </div>
-    </Router>
+      <div className="wrapper">
+        {page === "home" && <Home />}
+        {page === "logs" && <Logs />}
+      </div>
+    </>
   );
 }

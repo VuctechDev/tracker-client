@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 import L, { type LatLngExpression } from "leaflet";
 import { getDisplayDateTime } from "./utils/getDisplayDate";
 import CommandCenter from "./CommandCenter";
-import { Link } from "react-router-dom";
 
 const blueIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -193,9 +192,9 @@ const Home: FC = () => {
               />
             )}
             <div style={{ padding: "8px", marginTop: "6px" }}>
-              <Link style={{ padding: "8px" }} to={`/logs/${item.imei}`}>
+              {/* <Link style={{ padding: "8px" }} to={`/logs/${item.imei}`}>
                 LOGS
-              </Link>
+              </Link> */}
             </div>
           </div>
         ))}
