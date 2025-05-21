@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 
 export default function Logs() {
-  const { imei } = useParams<{ imei: string }>();
+  const { imei } = { imei: "" };
   const [logs, setLogs] = useState<
     {
       id: number;
