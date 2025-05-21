@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
-
-export default function Logs() {
-  const { imei } = { imei: "" };
+import { useEffect, useState, type FC } from "react";
+import type { DeviceType } from "./App";
+interface Props {
+  devices: DeviceType[];
+}
+const Logs: FC<Props> = ({ devices }) => {
   const [logs, setLogs] = useState<
     {
       id: number;
@@ -12,6 +14,7 @@ export default function Logs() {
       createdAt: string;
     }[]
   >([]);
+  const [imei, setImei] = useState(devices?.[0]?.imei);
 
   const getLogs = async () => {
     const res = await fetch(
@@ -29,6 +32,14 @@ export default function Logs() {
 
   return (
     <div style={{ minHeight: "100vh" }}>
+      DEVICES:
+      <div style={{ display: "flex", columnGap: "10px", padding: "10px" }}>
+        {devices.map((device) => (
+          <button onClick={() => setImei(device.imei)} key={device?.imei}>
+            {device.name?.toUpperCase()}
+          </button>
+        ))}
+      </div>
       <h2>Logs for IMEI: {imei}</h2>
       {logs.map((log) => (
         <div key={log.id}>
@@ -38,4 +49,6 @@ export default function Logs() {
       ))}
     </div>
   );
-}
+};
+
+export default Logs;

@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import L, { type LatLngExpression } from "leaflet";
 import { getDisplayDateTime } from "./utils/getDisplayDate";
 import CommandCenter from "./CommandCenter";
+import type { DeviceType } from "./App";
 
 const blueIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -43,25 +44,16 @@ const orangeDot = L.divIcon({
   iconAnchor: [5, 5],
 });
 
-const Home: FC = () => {
+interface Props {
+  devices: DeviceType[];
+}
+
+const Home: FC<Props> = ({ devices }) => {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [data, setData] = useState<
     { speed: number; lat: number; long: number; createdAt: string }[]
   >([]);
-  const [devices, setDevices] = useState<
-    {
-      id: number;
-      imei: string;
-      code: string;
-      battery: number;
-      signal: number;
-      version: number;
-      status: "static" | "dynamic" | "offline";
-      interval: string;
-      name: string;
-      createdAt: string;
-    }[]
-  >([]);
+
   const [deviceId, setDeviceId] = useState<string>("");
 
   const get = async () => {
@@ -71,17 +63,6 @@ const Home: FC = () => {
     const data = await res.json();
     setData(data.data);
   };
-  const getDevices = async () => {
-    const res = await fetch(
-      "https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/devices"
-    );
-    const data = await res.json();
-    setDevices(data.data);
-  };
-
-  useEffect(() => {
-    getDevices();
-  }, []);
 
   useEffect(() => {
     if (devices.length) {
