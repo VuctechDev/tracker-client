@@ -95,6 +95,7 @@ const Home: FC<Props> = ({ devices }) => {
       <div className="mapWrapper">
         {!!route.length && (
           <MapContainer
+            key={`${route[0]}`}
             center={route[0] ?? [0, 0]}
             zoom={14}
             scrollWheelZoom={true}

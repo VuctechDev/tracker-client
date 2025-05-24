@@ -147,6 +147,7 @@ body {
     display: flex;
     flex-direction: column-reverse;
     justify-content: flex-start;
+    height: auto;
   }
   .mapWrapper {
     width: 100vw;
