@@ -88,14 +88,18 @@ const Home: FC<Props> = ({ devices }) => {
     );
   }, [data]);
 
-  const selectDevice = (id: string) => setDeviceId(id);
+  const selectDevice = (id: string) => {
+    if (id !== deviceId) {
+      setDeviceId(id);
+      setRoute([]);
+    }
+  };
 
   return (
     <div className="wrapper">
       <div className="mapWrapper">
         {!!route.length && (
           <MapContainer
-            key={`${route[0]}`}
             center={route[0] ?? [0, 0]}
             zoom={14}
             scrollWheelZoom={true}

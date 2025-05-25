@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { useRef, type FC } from "react";
 
 interface Props {
   id: string;
@@ -26,10 +26,33 @@ const config = [
     label: "10m",
     value: 600,
   },
+  {
+    label: "15m",
+    value: 900,
+  },
+];
+const statusConfig = [
+  {
+    label: "1m",
+    value: 1,
+  },
+  {
+    label: "2m",
+    value: 2,
+  },
+  {
+    label: "5m",
+    value: 5,
+  },
+  {
+    label: "10m",
+    value: 10,
+  },
 ];
 
 const CommandCenter: FC<Props> = ({ id, value }) => {
-  console.log(value);
+  const rawValueRef = useRef("7878");
+
   const sendCommand = async (value: string, code: string) => {
     await fetch(
       `https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/devices/command/${id}`,
@@ -42,6 +65,22 @@ const CommandCenter: FC<Props> = ({ id, value }) => {
         body: JSON.stringify({
           value,
           code,
+        }),
+      }
+    );
+  };
+
+  const sendRawCommand = async (value: string) => {
+    await fetch(
+      `https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/devices/raw-command/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer your_token_here",
+        },
+        body: JSON.stringify({
+          value: value,
         }),
       }
     );
@@ -100,6 +139,44 @@ const CommandCenter: FC<Props> = ({ id, value }) => {
       >
         UGASI ZVUK
       </button>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <p>Status Interval: </p>
+        <select
+          // defaultValue={parseInt(value)}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          onChange={(e) => {
+            sendCommand(e.target.value, "13");
+          }}
+          className="select-custom"
+        >
+          {statusConfig.map((item) => (
+            <option value={item.value} key={item.value}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div style={{ alignItems: "center" }}>
+        <p>Raw HEX command: </p>
+        <input
+          style={{ width: "80%" }}
+          onChange={(e) => {
+            e.stopPropagation();
+            rawValueRef.current = e.target.value;
+          }}
+          defaultValue="7878"
+        ></input>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            sendRawCommand(rawValueRef.current);
+          }}
+        >
+          SEND
+        </button>
+      </div>
     </div>
   );
 };
