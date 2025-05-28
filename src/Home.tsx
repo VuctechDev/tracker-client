@@ -12,6 +12,9 @@ import L, { type LatLngExpression } from "leaflet";
 import { getDisplayDateTime } from "./utils/getDisplayDate";
 import CommandCenter from "./CommandCenter";
 import type { DeviceType } from "./App";
+import DevicesSelect from "./DevicesSelect";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import DeviceSettings from "./DeviceSettings";
 
 const blueIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -97,13 +100,21 @@ const Home: FC<Props> = ({ devices }) => {
 
   return (
     <div className="wrapper">
+      <div className="mobileNav">
+        <div>
+          <PersonOutlineIcon fontSize="medium" />
+        </div>
+        {deviceId && <DeviceSettings deviceId={deviceId} devices={devices} />}
+        <DevicesSelect devices={devices} onSelect={selectDevice} />
+      </div>
       <div className="mapWrapper">
         {!!route.length && (
           <MapContainer
             center={route[0] ?? [0, 0]}
-            zoom={14}
+            zoom={17}
             scrollWheelZoom={true}
             style={{ height: "100%", width: "100%" }}
+            zoomControl={false}
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -177,11 +188,7 @@ const Home: FC<Props> = ({ devices }) => {
                 }
               />
             )}
-            <div style={{ padding: "8px", marginTop: "6px" }}>
-              {/* <Link style={{ padding: "8px" }} to={`/logs/${item.imei}`}>
-                LOGS
-              </Link> */}
-            </div>
+            <div style={{ padding: "8px", marginTop: "6px" }}></div>
           </div>
         ))}
       </div>

@@ -31,7 +31,10 @@ export default function App() {
   }, []);
   return (
     <>
-      <div style={{ display: "flex", columnGap: "10px", padding: "10px" }}>
+      <div
+        style={{ display: "flex", columnGap: "10px", padding: "10px" }}
+        className="header"
+      >
         <button onClick={() => setPage("home")}>HOME</button>
         <button onClick={() => setPage("logs")}>LOGS</button>
       </div>
