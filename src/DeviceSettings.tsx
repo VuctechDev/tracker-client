@@ -45,7 +45,10 @@ const DeviceSettings: React.FC<Props> = ({ devices, deviceId }) => {
       >
         <Box sx={{ p: 1.5, width: "100%" }} className="devicesCardWrapper2">
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-            <Typography variant="h6">IMEI: {device?.imei}</Typography>
+            <Box sx={{ width: "100%" }}>
+              <Typography variant="h6">IMEI: {device?.imei}</Typography>
+            </Box>
+
             <Box sx={{ width: "50%" }}>
               <Typography>Battery: {device?.battery}%</Typography>
             </Box>
