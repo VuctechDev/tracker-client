@@ -46,7 +46,7 @@ const DevicesSelect: React.FC<Props> = ({ devices, onSelect }) => {
         }}
         style={{ marginTop: "4px" }}
       >
-        <Box sx={{ p: 1, minWidth: 200 }}>
+        <Box sx={{ p: 1, minWidth: 240 }}>
           <List sx={{ paddingY: 0 }}>
             {devices.map((item, index) => (
               <ListItem
@@ -62,6 +62,16 @@ const DevicesSelect: React.FC<Props> = ({ devices, onSelect }) => {
                     index !== devices.length - 1 ? "1px solid lightgray" : "",
                 }}
               >
+                <Box
+                  sx={{
+                    width: "11px",
+                    height: "11px",
+                    backgroundColor:
+                      item.status !== "offline" ? "#4caf50" : "#f44336",
+                    borderRadius: "50%",
+                    mr: "4px",
+                  }}
+                ></Box>
                 <ListItemText primary={item.name} />
                 <BatteryLevel level={item.battery} />
               </ListItem>
