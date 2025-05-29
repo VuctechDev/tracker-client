@@ -9,14 +9,15 @@ import {
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import L, { type LatLngExpression } from "leaflet";
-import { getDisplayDateTime } from "./utils/getDisplayDate";
+import { getRelativeTime } from "./utils/getDisplayDate";
 import CommandCenter from "./CommandCenter";
 import DevicesSelect from "./DevicesSelect";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import DeviceSettings from "./DeviceSettings";
 import type { DeviceType } from "./hooks/useDevicesPolling";
 import { useRoutesPollin } from "./hooks/useRoutesPollin";
-import DirectionsIcon from "@mui/icons-material/Directions";
+import SideBanner from "./SideBanner";
+
 const blueIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
   iconSize: [25, 41],
@@ -55,6 +56,9 @@ interface Props {
 const Home: FC<Props> = ({ devices }) => {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [deviceId, setDeviceId] = useState<string>("");
+  const [showRoute, setShowRoute] = useState<boolean>(
+    !!localStorage.getItem("showRoute")
+  );
   const data = useRoutesPollin(deviceId);
 
   useEffect(() => {
@@ -78,6 +82,10 @@ const Home: FC<Props> = ({ devices }) => {
     }
   };
 
+  const handleVariantChange = () => setShowRoute((prev) => !prev);
+
+  const routeDisplayData = showRoute ? route : route.slice(0, 1);
+
   return (
     <div className="wrapper">
       <div className="mobileNav">
@@ -86,18 +94,14 @@ const Home: FC<Props> = ({ devices }) => {
         </div>
         {deviceId && <DeviceSettings deviceId={deviceId} devices={devices} />}
         <DevicesSelect devices={devices} onSelect={selectDevice} />
-        {!!route.length && (
-          <a
-            style={{ position: "absolute", top: "60px", right: "10px" }}
-            href={`https://www.google.com/maps?q=${data[0]?.lat},${data[0]?.long}`}
-            target="_blank"
-          >
-            <DirectionsIcon color="primary" fontSize="large" />
-          </a>
-        )}
       </div>
+      <SideBanner
+        data={data[0]}
+        showRoute={showRoute}
+        handleVariantChange={handleVariantChange}
+      />
       <div className="mapWrapper">
-        {!!route.length && (
+        {!!routeDisplayData.length && (
           <MapContainer
             center={route[0] ?? [0, 0]}
             zoom={17}
@@ -110,7 +114,7 @@ const Home: FC<Props> = ({ devices }) => {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {route.map((position, i) => {
+            {routeDisplayData.map((position, i) => {
               const curr = data[i];
               const prev = data[i + 1];
 
@@ -137,7 +141,7 @@ const Home: FC<Props> = ({ devices }) => {
                   <Popup>
                     Reading #{i + 1} <br />
                     Speed: {data[i]?.speed} km/h <br />
-                    Time: {getDisplayDateTime(data[i]?.createdAt)}
+                    When: {getRelativeTime(data[i]?.createdAt)}
                     {isTimeGap && (
                       <>
                         <br />
@@ -149,7 +153,9 @@ const Home: FC<Props> = ({ devices }) => {
               );
             })}
 
-            {route.length > 1 && <Polyline positions={route} color="orange" />}
+            {routeDisplayData.length > 1 && (
+              <Polyline positions={route} color="orange" />
+            )}
           </MapContainer>
         )}
       </div>
