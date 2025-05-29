@@ -11,10 +11,11 @@ import { useEffect, useState } from "react";
 import L, { type LatLngExpression } from "leaflet";
 import { getDisplayDateTime } from "./utils/getDisplayDate";
 import CommandCenter from "./CommandCenter";
-import type { DeviceType } from "./App";
 import DevicesSelect from "./DevicesSelect";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import DeviceSettings from "./DeviceSettings";
+import type { DeviceType } from "./hooks/useDevicesPolling";
+import { useRoutesPollin } from "./hooks/useRoutesPollin";
 
 const blueIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -53,35 +54,14 @@ interface Props {
 
 const Home: FC<Props> = ({ devices }) => {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
-  const [data, setData] = useState<
-    { speed: number; lat: number; long: number; createdAt: string }[]
-  >([]);
-
   const [deviceId, setDeviceId] = useState<string>("");
-
-  const get = async () => {
-    const res = await fetch(
-      `https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/data/${deviceId}`
-    );
-    const data = await res.json();
-    setData(data.data);
-  };
+  const data = useRoutesPollin(deviceId);
 
   useEffect(() => {
     if (devices.length) {
       setDeviceId(devices[0]?.imei);
     }
   }, [devices]);
-
-  useEffect(() => {
-    if (deviceId) {
-      get();
-      const int = setInterval(() => get(), 10000);
-      return () => {
-        clearInterval(int);
-      };
-    }
-  }, [deviceId]);
 
   useEffect(() => {
     setRoute(() =>

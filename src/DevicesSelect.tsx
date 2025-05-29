@@ -7,7 +7,7 @@ import {
   Typography,
   Popover,
 } from "@mui/material";
-import type { DeviceType } from "./App";
+import type { DeviceType } from "./hooks/useDevicesPolling";
 
 interface Props {
   devices: DeviceType[];

@@ -1,5 +1,5 @@
 import { useEffect, useState, type FC } from "react";
-import type { DeviceType } from "./App";
+import type { DeviceType } from "./hooks/useDevicesPolling";
 interface Props {
   devices: DeviceType[];
 }

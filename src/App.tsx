@@ -1,34 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Home from "./Home";
 import Logs from "./Logs";
-
-export type DeviceType = {
-  id: number;
-  imei: string;
-  code: string;
-  battery: number;
-  signal: number;
-  version: number;
-  status: "static" | "dynamic" | "offline";
-  interval: string;
-  name: string;
-  createdAt: string;
-};
+import { useDevicesPolling } from "./hooks/useDevicesPolling";
 
 export default function App() {
   const [page, setPage] = useState("home");
-  const [devices, setDevices] = useState<DeviceType[]>([]);
+  const devices = useDevicesPolling();
 
-  const getDevices = async () => {
-    const res = await fetch(
-      "https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/devices"
-    );
-    const data = await res.json();
-    setDevices(data.data);
-  };
-  useEffect(() => {
-    getDevices();
-  }, []);
   return (
     <>
       <div

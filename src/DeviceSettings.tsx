@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box, Typography, Popover } from "@mui/material";
-import type { DeviceType } from "./App";
 import SettingsIcon from "@mui/icons-material/Settings";
 import CommandCenter from "./CommandCenter";
+import type { DeviceType } from "./hooks/useDevicesPolling";
 
 interface Props {
   devices: DeviceType[];
