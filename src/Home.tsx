@@ -82,7 +82,16 @@ const Home: FC<Props> = ({ devices }) => {
     }
   };
 
-  const handleVariantChange = () => setShowRoute((prev) => !prev);
+  const handleVariantChange = () => {
+    setShowRoute((prev) => {
+      if (prev) {
+        localStorage.removeItem("showRoute");
+      } else {
+        localStorage.setItem("showRoute", "true");
+      }
+      return !prev;
+    });
+  };
 
   const routeDisplayData = showRoute ? route : route.slice(0, 1);
 
