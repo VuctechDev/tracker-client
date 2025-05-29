@@ -16,7 +16,7 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import DeviceSettings from "./DeviceSettings";
 import type { DeviceType } from "./hooks/useDevicesPolling";
 import { useRoutesPollin } from "./hooks/useRoutesPollin";
-
+import DirectionsIcon from "@mui/icons-material/Directions";
 const blueIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
   iconSize: [25, 41],
@@ -86,6 +86,15 @@ const Home: FC<Props> = ({ devices }) => {
         </div>
         {deviceId && <DeviceSettings deviceId={deviceId} devices={devices} />}
         <DevicesSelect devices={devices} onSelect={selectDevice} />
+        {!!route.length && (
+          <a
+            style={{ position: "absolute", top: "60px", right: "10px" }}
+            href={`https://www.google.com/maps?q=${data[0]?.lat},${data[0]?.long}`}
+            target="_blank"
+          >
+            <DirectionsIcon color="primary" fontSize="large" />
+          </a>
+        )}
       </div>
       <div className="mapWrapper">
         {!!route.length && (
