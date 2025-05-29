@@ -3,6 +3,7 @@ import { Box, Typography, Popover } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import CommandCenter from "./CommandCenter";
 import type { DeviceType } from "./hooks/useDevicesPolling";
+import { getRelativeTime } from "./utils/getDisplayDate";
 
 interface Props {
   devices: DeviceType[];
@@ -60,6 +61,11 @@ const DeviceSettings: React.FC<Props> = ({ devices, deviceId }) => {
             </Box>
             <Box sx={{ width: "50%" }}>
               <Typography>Version: {device?.version}</Typography>
+            </Box>
+            <Box sx={{ width: "100%" }}>
+              <Typography>
+                Last update: {getRelativeTime(device?.updatedAt)}
+              </Typography>
             </Box>
           </Box>
           {device?.status !== "offline" && (

@@ -58,7 +58,7 @@ const Home: FC<Props> = ({ devices }) => {
   const data = useRoutesPollin(deviceId);
 
   useEffect(() => {
-    if (devices.length) {
+    if (devices.length && !deviceId) {
       setDeviceId(devices[0]?.imei);
     }
   }, [devices]);

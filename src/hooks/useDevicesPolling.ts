@@ -11,6 +11,7 @@ export type DeviceType = {
   interval: string;
   name: string;
   createdAt: string;
+  updatedAt: string;
 };
 
 export const useDevicesPolling = () => {

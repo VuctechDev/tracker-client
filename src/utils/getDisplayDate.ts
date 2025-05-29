@@ -31,6 +31,30 @@ export const getDisplayTime = (time?: string) => {
   return `${hours}:${minutes}:${seconds}`;
 };
 
+export function getRelativeTime(date: string): string {
+  const now = new Date();
+  const time = new Date(date);
+  const diffMs = now.getTime() - time.getTime();
+  const diffSec = Math.floor(diffMs / 1000);
+
+  if (diffSec < 60) {
+    return `${diffSec} sec${diffSec !== 1 ? "s" : ""} ago`;
+  }
+
+  const diffMin = Math.floor(diffSec / 60);
+  if (diffMin < 60) {
+    return `${diffMin} min${diffMin !== 1 ? "s" : ""} ago`;
+  }
+
+  const diffHours = Math.floor(diffMin / 60);
+  if (diffHours < 24) {
+    return `${diffHours} hour${diffHours !== 1 ? "s" : ""} ago`;
+  }
+
+  const diffDays = Math.floor(diffHours / 24);
+  return `${diffDays} day${diffDays !== 1 ? "s" : ""} ago`;
+}
+
 // const months = [
 //   "january",
 //   "february",

@@ -18,11 +18,13 @@ export const useRoutesPollin = (deviceId: string) => {
     setData(data.data);
   };
   useEffect(() => {
-    get();
-    const int = setInterval(() => get(), 10000);
-    return () => {
-      clearInterval(int);
-    };
+    if (deviceId) {
+      get();
+      const int = setInterval(() => get(), 10000);
+      return () => {
+        clearInterval(int);
+      };
+    }
   }, [deviceId]);
 
   return data;
