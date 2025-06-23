@@ -13,7 +13,6 @@ import L, { type LatLngExpression } from "leaflet";
 import { getRelativeTime } from "./utils/getDisplayDate";
 import CommandCenter from "./CommandCenter";
 import DevicesSelect from "./DevicesSelect";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import DeviceSettings from "./DeviceSettings";
 import type { DeviceType } from "./hooks/useDevicesPolling";
 import { useRoutesPollin } from "./hooks/useRoutesPollin";

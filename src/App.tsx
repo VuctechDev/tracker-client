@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Home from "./Home";
 import Logs from "./Logs";
 import { useDevicesPolling } from "./hooks/useDevicesPolling";
