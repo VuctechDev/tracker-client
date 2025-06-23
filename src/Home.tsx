@@ -5,6 +5,7 @@ import {
   Polyline,
   Marker,
   Popup,
+  useMapEvent,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
@@ -17,6 +18,7 @@ import DeviceSettings from "./DeviceSettings";
 import type { DeviceType } from "./hooks/useDevicesPolling";
 import { useRoutesPollin } from "./hooks/useRoutesPollin";
 import SideBanner from "./SideBanner";
+import AccountMenu from "./AccountMenu";
 
 const blueIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -52,6 +54,19 @@ const orangeDot = L.divIcon({
 interface Props {
   devices: DeviceType[];
 }
+
+const MapClickHandler = ({
+  onMapClick,
+}: {
+  onMapClick: (lat: number, lng: number) => void;
+}) => {
+  useMapEvent("click", (e) => {
+    const { lat, lng } = e.latlng;
+    onMapClick(lat, lng);
+  });
+
+  return null;
+};
 
 const Home: FC<Props> = ({ devices }) => {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
@@ -98,9 +113,7 @@ const Home: FC<Props> = ({ devices }) => {
   return (
     <div className="wrapper">
       <div className="mobileNav">
-        <div>
-          <PersonOutlineIcon fontSize="medium" />
-        </div>
+        <AccountMenu />
         {deviceId && <DeviceSettings deviceId={deviceId} devices={devices} />}
         <DevicesSelect devices={devices} onSelect={selectDevice} />
       </div>
@@ -118,6 +131,10 @@ const Home: FC<Props> = ({ devices }) => {
             style={{ height: "100%", width: "100%" }}
             zoomControl={false}
           >
+            <MapClickHandler
+              onMapClick={(lat, lng) => console.log("Clicked at:", lat, lng)}
+            />
+
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
