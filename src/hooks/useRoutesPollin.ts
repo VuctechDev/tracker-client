@@ -11,9 +11,7 @@ export const useRoutesPollin = (deviceId: string) => {
   const [data, setData] = useState<RouteType[]>([]);
 
   const get = async () => {
-    const res = await fetch(
-      `https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/data/${deviceId}`
-    );
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/data/${deviceId}`);
     const data = await res.json();
     setData(data.data);
   };
