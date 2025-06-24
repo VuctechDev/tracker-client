@@ -1,32 +1,32 @@
-import { useState } from "react";
+// import { useState } from "react";
 import {
   Box,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-  Popover,
+  // Button,
+  // List,
+  // ListItem,
+  // ListItemText,
+  // Popover,
 } from "@mui/material";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 
 // interface Props {}
 
 const AccountMenu: React.FC = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  // const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  //   // setAnchorEl(event.currentTarget);
+  // };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
 
-  const open = Boolean(anchorEl);
+  // const open = Boolean(anchorEl);
 
   return (
     <>
-      <Box className="mobileNavVevices" onClick={handleClick}>
+      {/* <Box className="mobileNavVevices" onClick={handleClick}>
         <PersonOutlineIcon fontSize="medium" />
       </Box>
       <Popover
@@ -59,7 +59,11 @@ const AccountMenu: React.FC = () => {
             </ListItem>
           </List>
         </Box>
-      </Popover>
+      </Popover> */}
+
+      <Box className="mobileNavVevices">
+        <PersonOutlineIcon fontSize="medium" />
+      </Box>
     </>
   );
 };
