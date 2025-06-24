@@ -24,6 +24,8 @@ const DeviceSettings: React.FC<Props> = ({ devices, deviceId }) => {
   const open = Boolean(anchorEl);
   const device = devices.find((d) => d.imei === deviceId) ?? ({} as DeviceType);
 
+  const isDev = import.meta.env.VITE_NODE_ENV === "dev";
+
   return (
     <>
       <Box className="mobileNavVevices2" onClick={handleClick}>
@@ -68,7 +70,7 @@ const DeviceSettings: React.FC<Props> = ({ devices, deviceId }) => {
               </Typography>
             </Box>
           </Box>
-          {device?.status !== "offline" && (
+          {device?.status !== "offline" && isDev && (
             <CommandCenter
               id={device?.imei}
               value={
