@@ -18,9 +18,7 @@ export const useDevicesPolling = () => {
   const [data, setData] = useState<DeviceType[]>([]);
 
   const getDevices = async () => {
-    const res = await fetch(
-      "https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/devices"
-    );
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/devices`);
     const data = await res.json();
     setData(data.data);
   };

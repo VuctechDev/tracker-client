@@ -17,9 +17,7 @@ const Logs: FC<Props> = ({ devices }) => {
   const [imei, setImei] = useState(devices?.[0]?.imei);
 
   const getLogs = async () => {
-    const res = await fetch(
-      `https://gwc0c0wkg44k4sgcgwgsw44g.vuctechdev.online/logs/${imei}`
-    );
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/logs/${imei}`);
     const data = await res.json();
     setLogs(data.data);
   };
