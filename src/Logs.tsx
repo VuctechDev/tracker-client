@@ -1,9 +1,8 @@
 import { useEffect, useState, type FC } from "react";
-import type { DeviceType } from "./hooks/useDevicesPolling";
-interface Props {
-  devices: DeviceType[];
-}
-const Logs: FC<Props> = ({ devices }) => {
+import { request } from "./utils/api";
+import { useGetDevices } from "./queries/devices";
+interface Props {}
+const Logs: FC<Props> = () => {
   const [logs, setLogs] = useState<
     {
       id: number;
@@ -14,11 +13,12 @@ const Logs: FC<Props> = ({ devices }) => {
       createdAt: string;
     }[]
   >([]);
+  const { data: devicesData } = useGetDevices();
+  const devices = devicesData?.data ?? [];
   const [imei, setImei] = useState(devices?.[0]?.imei);
 
   const getLogs = async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/logs/${imei}`);
-    const data = await res.json();
+    const data = await request(`/logs/${imei}`);
     setLogs(data.data);
   };
 

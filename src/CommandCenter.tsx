@@ -1,4 +1,5 @@
 import { useRef, type FC } from "react";
+import { request } from "./utils/api";
 
 interface Props {
   id: string;
@@ -54,29 +55,15 @@ const CommandCenter: FC<Props> = ({ id, value }) => {
   const rawValueRef = useRef("7878");
 
   const sendCommand = async (value: string, code: string) => {
-    await fetch(`${import.meta.env.VITE_API_URL}/devices/command/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer your_token_here",
-      },
-      body: JSON.stringify({
-        value,
-        code,
-      }),
+    await request(`/devices/command/${id}`, "PATCH", {
+      value,
+      code,
     });
   };
 
   const sendRawCommand = async (value: string) => {
-    await fetch(`${import.meta.env.VITE_API_URL}/devices/raw-command/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer your_token_here",
-      },
-      body: JSON.stringify({
-        value: value,
-      }),
+    await request(`/devices/raw-command/${id}`, "PATCH", {
+      value,
     });
   };
 

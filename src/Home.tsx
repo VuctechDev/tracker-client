@@ -14,10 +14,10 @@ import { getRelativeTime } from "./utils/getDisplayDate";
 import CommandCenter from "./CommandCenter";
 import DevicesSelect from "./DevicesSelect";
 import DeviceSettings from "./DeviceSettings";
-import type { DeviceType } from "./hooks/useDevicesPolling";
-import { useRoutesPollin } from "./hooks/useRoutesPollin";
 import SideBanner from "./SideBanner";
 import AccountMenu from "./AccountMenu";
+import { useGetDevices } from "./queries/devices";
+import { useGetRoute } from "./queries/route";
 
 const blueIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -50,9 +50,7 @@ const orangeDot = L.divIcon({
   iconAnchor: [5, 5],
 });
 
-interface Props {
-  devices: DeviceType[];
-}
+interface Props {}
 
 const MapClickHandler = ({
   onMapClick,
@@ -67,27 +65,31 @@ const MapClickHandler = ({
   return null;
 };
 
-const Home: FC<Props> = ({ devices }) => {
+const Home: FC<Props> = () => {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [deviceId, setDeviceId] = useState<string>("");
   const [showRoute, setShowRoute] = useState<boolean>(
     !!localStorage.getItem("showRoute")
   );
-  const data = useRoutesPollin(deviceId);
+  const { data: routeData } = useGetRoute(deviceId);
+  const { data: devicesData } = useGetDevices();
+  const devices = devicesData?.data ?? [];
 
   useEffect(() => {
-    if (devices.length && !deviceId) {
+    if (devices?.length && !deviceId) {
       setDeviceId(devices[0]?.imei);
     }
   }, [devices]);
 
   useEffect(() => {
-    setRoute(() =>
-      data.map((item) => {
-        return [item.lat, item.long];
-      })
-    );
-  }, [data]);
+    if (routeData?.data) {
+      setRoute(() =>
+        routeData?.data?.map((item) => {
+          return [item.lat, item.long];
+        })
+      );
+    }
+  }, [routeData]);
 
   const selectDevice = (id: string) => {
     if (id !== deviceId) {
@@ -113,16 +115,20 @@ const Home: FC<Props> = ({ devices }) => {
     <div className="wrapper">
       <div className="mobileNav">
         <AccountMenu />
-        {deviceId && <DeviceSettings deviceId={deviceId} devices={devices} />}
-        <DevicesSelect devices={devices} onSelect={selectDevice} />
+        {deviceId && <DeviceSettings deviceId={deviceId} />}
+        <DevicesSelect onSelect={selectDevice} />
       </div>
       <SideBanner
-        data={data[0]}
+        data={routeData?.data[0]}
         showRoute={showRoute}
         handleVariantChange={handleVariantChange}
       />
       <div className="mapWrapper">
-        {!!routeDisplayData.length && (
+        {/* {loading && <Typography>Loading...</Typography>}
+        {!loading && !routeDisplayData?.length && (
+          <Typography>No records yet received from the device!</Typography>
+        )} */}
+        {!!routeDisplayData?.length && (
           <MapContainer
             center={route[0] ?? [0, 0]}
             zoom={17}
@@ -140,8 +146,8 @@ const Home: FC<Props> = ({ devices }) => {
             />
 
             {routeDisplayData.map((position, i) => {
-              const curr = data[i];
-              const prev = data[i + 1];
+              const curr = routeData?.data[i];
+              const prev = routeData?.data[i + 1];
 
               const currTime = new Date(curr?.createdAt || 0).getTime();
               const prevTime = new Date(prev?.createdAt || 0).getTime();
@@ -165,8 +171,8 @@ const Home: FC<Props> = ({ devices }) => {
                 <Marker key={i} position={position} icon={icon}>
                   <Popup>
                     Reading #{i + 1} <br />
-                    Speed: {data[i]?.speed} km/h <br />
-                    When: {getRelativeTime(data[i]?.createdAt)}
+                    Speed: {routeData?.data[i]?.speed} km/h <br />
+                    When: {getRelativeTime(routeData?.data[i]?.createdAt ?? "")}
                     {isTimeGap && (
                       <>
                         <br />
@@ -185,7 +191,7 @@ const Home: FC<Props> = ({ devices }) => {
         )}
       </div>
       <div className="devicesCardWrapper">
-        {devices.map((item) => (
+        {devices?.map((item) => (
           <div
             key={item.id}
             className="devicesCard"
