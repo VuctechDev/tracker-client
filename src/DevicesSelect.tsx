@@ -7,14 +7,15 @@ import {
   Typography,
   Popover,
 } from "@mui/material";
-import type { DeviceType } from "./hooks/useDevicesPolling";
+import { useGetDevices } from "./queries/devices";
 
 interface Props {
-  devices: DeviceType[];
   onSelect: (imei: string) => void;
 }
 
-const DevicesSelect: React.FC<Props> = ({ devices, onSelect }) => {
+const DevicesSelect: React.FC<Props> = ({ onSelect }) => {
+  const { data: devicesData } = useGetDevices();
+  const devices = devicesData?.data ?? [];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {

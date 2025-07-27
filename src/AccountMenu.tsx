@@ -1,32 +1,32 @@
-// import { useState } from "react";
+import { useState } from "react";
 import {
   Box,
-  // Button,
-  // List,
-  // ListItem,
+  List,
+  ListItem,
   // ListItemText,
-  // Popover,
+  Popover,
 } from "@mui/material";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import LogOut from "./components/LogOut";
 
 // interface Props {}
 
 const AccountMenu: React.FC = () => {
-  // const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  // const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-  //   // setAnchorEl(event.currentTarget);
-  // };
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-  // const open = Boolean(anchorEl);
+  const open = Boolean(anchorEl);
 
   return (
     <>
-      {/* <Box className="mobileNavVevices" onClick={handleClick}>
+      <Box className="mobileNavVevices" onClick={handleClick}>
         <PersonOutlineIcon fontSize="medium" />
       </Box>
       <Popover
@@ -52,71 +52,15 @@ const AccountMenu: React.FC = () => {
                 alignItems: "flex-start",
               }}
             >
-              <ListItemText primary="stefan@gmail.com" />
-              <Button variant="outlined" size="small">
-                Log Out
-              </Button>
+              {/* <ListItemText primary="stefan@gmail.com" /> */}
+              {/* <Box sx={{ height: "30px" }} /> */}
+              <LogOut />
             </ListItem>
           </List>
         </Box>
-      </Popover> */}
-
-      <Box className="mobileNavVevices">
-        <PersonOutlineIcon fontSize="medium" />
-      </Box>
+      </Popover>
     </>
   );
 };
-
-// interface BatteryLevelProps {
-//   level: number;
-// }
-
-// const getColor = (index: number, activeSegments: number): string => {
-//   if (index >= activeSegments) return "transparent";
-//   if (activeSegments >= 5) return "#4caf50"; // green
-//   if (activeSegments >= 3) return "#ffeb3b"; // yellow
-//   return "#f44336"; // red
-// };
-
-// function BatteryLevel({ level }: BatteryLevelProps) {
-//   const clamped = Math.max(0, Math.min(level, 100));
-//   const activeSegments = Math.round((clamped / 100) * 6);
-
-//   return (
-//     <Box display="flex" alignItems="center">
-//       <Box
-//         sx={{
-//           width: 32,
-//           height: 16,
-//           border: "1px solid #333",
-//           borderRadius: "2px",
-//           display: "flex",
-//           overflow: "hidden",
-//         }}
-//       >
-//         {[...Array(6)].map((_, i) => (
-//           <Box
-//             key={i}
-//             sx={{
-//               flex: 1,
-//               backgroundColor: getColor(i, activeSegments),
-//               marginRight: i < 5 ? "1px" : 0,
-//             }}
-//           />
-//         ))}
-//       </Box>
-//       <Box
-//         sx={{
-//           width: 4,
-//           height: 7,
-//           backgroundColor: "#333",
-//           ml: "0px",
-//           borderRadius: "2px",
-//         }}
-//       />
-//     </Box>
-//   );
-// }
 
 export default AccountMenu;
