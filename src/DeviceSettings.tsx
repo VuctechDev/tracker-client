@@ -78,12 +78,14 @@ const DeviceSettings: React.FC<Props> = ({ deviceId }) => {
             <Box sx={{ width: "100%" }}>
               <Typography>
                 Last kilometer made:{" "}
-                {getRelativeTime(
-                  `${new Date(device?.analytics?.lastKilometerReachedAt)}`
-                )}
+                {device?.analytics?.lastKilometerReachedAt
+                  ? getRelativeTime(
+                      `${new Date(device?.analytics?.lastKilometerReachedAt)}`
+                    )
+                  : "--"}
               </Typography>
             </Box>
-            <Box sx={{ width: "100%", mt: "6px"  }}>
+            <Box sx={{ width: "100%", mt: "6px" }}>
               <Typography>
                 Last update: {getRelativeTime(device?.updatedAt)}
               </Typography>
