@@ -210,9 +210,11 @@ const Home: FC<Props> = () => {
                 <p>Distance in last hour: {item?.analytics?.lastHour}m</p>
                 <p>
                   Last kilometer made:{" "}
-                  {getRelativeTime(
-                    `${new Date(item?.analytics?.lastKilometerReachedAt)}`
-                  )}
+                  {item?.analytics?.lastKilometerReachedAt
+                    ? getRelativeTime(
+                        `${new Date(item?.analytics?.lastKilometerReachedAt)}`
+                      )
+                    : "--"}
                 </p>
                 <p>Version: {item.version}</p>
               </>
