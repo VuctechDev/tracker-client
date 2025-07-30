@@ -7,14 +7,14 @@ import {
   Typography,
   Popover,
 } from "@mui/material";
-import { useGetDevices } from "./queries/devices";
+import { useDevicesPooling } from "./queries/devices";
 
 interface Props {
   onSelect: (imei: string) => void;
 }
 
 const DevicesSelect: React.FC<Props> = ({ onSelect }) => {
-  const { data: devicesData } = useGetDevices();
+  const { data: devicesData } = useDevicesPooling();
   const devices = devicesData?.data ?? [];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 

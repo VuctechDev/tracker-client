@@ -8,6 +8,7 @@ export type RouteType = {
   createdAt: string;
 };
 
+
 export const useGetRoute = (deviceId: string) => {
   return useQuery({
     queryKey: ["route", deviceId],
@@ -18,5 +19,6 @@ export const useGetRoute = (deviceId: string) => {
     refetchOnWindowFocus: false,
     staleTime: 30_000,
     placeholderData: { data: [] },
+    enabled: !!deviceId,
   });
 };

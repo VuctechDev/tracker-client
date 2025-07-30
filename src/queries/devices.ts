@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { request } from "../utils/api";
+import type { OrganizationType } from "./organizations";
 
 export type DeviceType = {
   id: number;
@@ -11,11 +12,19 @@ export type DeviceType = {
   status: "static" | "dynamic" | "offline";
   interval: string;
   name: string;
+  organizationId: number;
   createdAt: string;
   updatedAt: string;
+  organization: OrganizationType;
+  analytics: {
+    lastKilometer: string;
+    lastKilometerReachedAt: number;
+    lastHour: string;
+    last24h: string;
+  };
 };
 
-export const useGetDevices = () => {
+export const useDevicesPooling = () => {
   return useQuery({
     queryKey: ["devices"],
     queryFn: () => request(`/devices`) as Promise<{ data: DeviceType[] }>,
@@ -23,6 +32,13 @@ export const useGetDevices = () => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     staleTime: 60_000,
-    placeholderData: { data: [] }, 
+    placeholderData: { data: [] },
+  });
+};
+
+export const useGetDevices = () => {
+  return useQuery({
+    queryKey: ["bo_devices"],
+    queryFn: () => request(`/bo/devices`) as Promise<{ data: DeviceType[] }>,
   });
 };
