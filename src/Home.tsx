@@ -16,7 +16,7 @@ import DevicesSelect from "./DevicesSelect";
 import DeviceSettings from "./DeviceSettings";
 import SideBanner from "./SideBanner";
 import AccountMenu from "./AccountMenu";
-import { useGetDevices } from "./queries/devices";
+import { useDevicesPooling } from "./queries/devices";
 import { useGetRoute } from "./queries/route";
 
 const blueIcon = new L.Icon({
@@ -72,7 +72,7 @@ const Home: FC<Props> = () => {
     !!localStorage.getItem("showRoute")
   );
   const { data: routeData } = useGetRoute(deviceId);
-  const { data: devicesData } = useGetDevices();
+  const { data: devicesData } = useDevicesPooling();
   const devices = devicesData?.data ?? [];
 
   useEffect(() => {
@@ -204,7 +204,19 @@ const Home: FC<Props> = () => {
             <p>IMEI: {item.imei}</p>
             <p>Battery: {item.battery}%</p> <p>Signal: {item.signal}%</p>
             <p>Status: {item.status?.toUpperCase()}</p>
-            <p>Version: {item.version}</p>
+            {item?.analytics && (
+              <>
+                <p>Distance in 24h: {item?.analytics?.last24h}m</p>
+                <p>Distance in last hour: {item?.analytics?.lastHour}m</p>
+                <p>
+                  Last kilometer made:{" "}
+                  {getRelativeTime(
+                    `${new Date(item?.analytics?.lastKilometerReachedAt)}`
+                  )}
+                </p>
+                <p>Version: {item.version}</p>
+              </>
+            )}
             {item.status !== "offline" && (
               <CommandCenter
                 id={item.imei}

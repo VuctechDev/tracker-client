@@ -1,7 +1,9 @@
 import { useEffect, useState, type FC } from "react";
 import { request } from "./utils/api";
-import { useGetDevices } from "./queries/devices";
+import { useDevicesPooling } from "./queries/devices";
+
 interface Props {}
+
 const Logs: FC<Props> = () => {
   const [logs, setLogs] = useState<
     {
@@ -13,7 +15,7 @@ const Logs: FC<Props> = () => {
       createdAt: string;
     }[]
   >([]);
-  const { data: devicesData } = useGetDevices();
+  const { data: devicesData } = useDevicesPooling();
   const devices = devicesData?.data ?? [];
   const [imei, setImei] = useState(devices?.[0]?.imei);
 

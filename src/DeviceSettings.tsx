@@ -3,14 +3,14 @@ import { Box, Typography, Popover } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import CommandCenter from "./CommandCenter";
 import { getRelativeTime } from "./utils/getDisplayDate";
-import { useGetDevices, type DeviceType } from "./queries/devices";
+import { useDevicesPooling, type DeviceType } from "./queries/devices";
 
 interface Props {
   deviceId: string;
 }
 
 const DeviceSettings: React.FC<Props> = ({ deviceId }) => {
-  const { data: devicesData } = useGetDevices();
+  const { data: devicesData } = useDevicesPooling();
   const devices = devicesData?.data ?? [];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -65,7 +65,25 @@ const DeviceSettings: React.FC<Props> = ({ deviceId }) => {
             <Box sx={{ width: "50%" }}>
               <Typography>Version: {device?.version}</Typography>
             </Box>
+            <Box sx={{ width: "100%", mt: "6px" }}>
+              <Typography>
+                Distance in 24h: {device?.analytics?.last24h}m
+              </Typography>
+            </Box>
             <Box sx={{ width: "100%" }}>
+              <Typography>
+                Distance in last hour: {device?.analytics?.lastHour}m
+              </Typography>
+            </Box>
+            <Box sx={{ width: "100%" }}>
+              <Typography>
+                Last kilometer made:{" "}
+                {getRelativeTime(
+                  `${new Date(device?.analytics?.lastKilometerReachedAt)}`
+                )}
+              </Typography>
+            </Box>
+            <Box sx={{ width: "100%", mt: "6px"  }}>
               <Typography>
                 Last update: {getRelativeTime(device?.updatedAt)}
               </Typography>
@@ -80,7 +98,7 @@ const DeviceSettings: React.FC<Props> = ({ deviceId }) => {
               }
             />
           )}
-          <div style={{ padding: "8px", marginTop: "6px" }}></div>
+          <div style={{ marginTop: "6px" }}></div>
         </Box>
       </Popover>
     </>

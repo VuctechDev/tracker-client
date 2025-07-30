@@ -6,6 +6,7 @@ import LoginPage from "./pages/Login";
 import QueryProvider from "./QueryProvider";
 import LogOut from "./components/LogOut";
 import Box from "@mui/material/Box";
+import Backoffice from "./pages/Backoffice";
 
 export default function App() {
   return (
@@ -13,7 +14,7 @@ export default function App() {
       <Router>
         <AuthProvider>
           <>
-            <div
+            <Box
               style={{ display: "flex", columnGap: "10px", padding: "10px" }}
               className="header"
             >
@@ -25,15 +26,16 @@ export default function App() {
               >
                 <LogOut />
               </Box>
-            </div>
+            </Box>
 
-            <div className="wrapper">
+            <Box className="wrapper" width={1}>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/logs" element={<Logs />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/bo" element={<Backoffice />} />
               </Routes>
-            </div>
+            </Box>
           </>
         </AuthProvider>
       </Router>
