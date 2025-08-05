@@ -3,8 +3,10 @@ import Box from "@mui/material/Box";
 import DirectionsIcon from "@mui/icons-material/Directions";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import TransformIcon from "@mui/icons-material/Transform";
+import { useGetGeofence } from "./queries/geofence";
 
 interface Props {
+  deviceId: string;
   data?: { lat: number; long: number };
   showRoute: boolean;
   handleVariantChange: () => void;
@@ -12,11 +14,13 @@ interface Props {
 }
 
 const SideBanner: React.FC<Props> = ({
+  deviceId,
   data,
   showRoute,
   handleVariantChange,
   handleFenceDisplay,
 }) => {
+  const { data: geofence } = useGetGeofence(deviceId);
   return (
     <Box
       sx={{
@@ -36,9 +40,15 @@ const SideBanner: React.FC<Props> = ({
         padding: "16px 0px",
       }}
     >
-      <Box component="div" onClick={handleFenceDisplay}>
-        <TransformIcon color="success" fontSize="large" />
-      </Box>
+      {!!geofence?.data && (
+        <Box
+          component="div"
+          onClick={handleFenceDisplay}
+          sx={{ cursor: "pointer" }}
+        >
+          <TransformIcon color="success" fontSize="large" />
+        </Box>
+      )}
       {!!data && (
         <a
           href={`https://www.google.com/maps?q=${data.lat},${data.long}`}
@@ -47,7 +57,7 @@ const SideBanner: React.FC<Props> = ({
           <DirectionsIcon color="primary" fontSize="large" />
         </a>
       )}
-      <Box onClick={handleVariantChange}>
+      <Box onClick={handleVariantChange} sx={{ cursor: "pointer" }}>
         {showRoute ? (
           <LocationOnIcon color="warning" fontSize="large" />
         ) : (

@@ -108,10 +108,13 @@ const Home: FC<Props> = () => {
     <div className="wrapper">
       <div className="mobileNav">
         <AccountMenu />
-        {deviceId && <DeviceSettings deviceId={deviceId} />}
+        {deviceId && (
+          <DeviceSettings deviceId={deviceId} center={route?.slice(0, 1)} />
+        )}
         <DevicesSelect onSelect={selectDevice} />
       </div>
       <SideBanner
+        deviceId={deviceId}
         data={routeData?.data[0]}
         showRoute={showRoute}
         handleVariantChange={handleVariantChange}
