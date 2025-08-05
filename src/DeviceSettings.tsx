@@ -5,12 +5,14 @@ import CommandCenter from "./CommandCenter";
 import { getRelativeTime } from "./utils/getDisplayDate";
 import { useDevicesPooling, type DeviceType } from "./queries/devices";
 import { useNavigate } from "react-router-dom";
+import type { LatLngExpression } from "leaflet";
 
 interface Props {
   deviceId: string;
+  center?: LatLngExpression[];
 }
 
-const DeviceSettings: React.FC<Props> = ({ deviceId }) => {
+const DeviceSettings: React.FC<Props> = ({ deviceId, center }) => {
   const navigate = useNavigate();
   const { data: devicesData } = useDevicesPooling();
   const devices = devicesData?.data ?? [];
@@ -106,7 +108,9 @@ const DeviceSettings: React.FC<Props> = ({ deviceId }) => {
               fullWidth
               size="small"
               variant="outlined"
-              onClick={() => navigate("/geofence", { state: { deviceId } })}
+              onClick={() =>
+                navigate("/geofence", { state: { deviceId, center } })
+              }
             >
               geofence
             </Button>

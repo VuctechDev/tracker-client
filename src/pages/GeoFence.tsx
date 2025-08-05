@@ -71,16 +71,16 @@ const blueIcon = new L.Icon({
 const GeoFence: React.FC<Props> = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { deviceId } = location.state;
+  const { deviceId, center } = location.state;
   const [fence, setFence] = useState<LatLngExpression[]>([]);
 
   const { data } = useGetGeofence(deviceId);
-
+  console.log(data);
   const handleUndo = () => setFence((prev) => prev.slice(0, -1));
   const handleReset = () => setFence([]);
   const handleBack = () => navigate("/");
   const handleSave = async () => {
-    if (!data) {
+    if (!data?.data) {
       await request("/geofence", "POST", { coordinates: fence, deviceId });
       alert("Created!");
     } else {
@@ -149,7 +149,7 @@ const GeoFence: React.FC<Props> = () => {
       </Box>
       <Box className="mapWrapper">
         <MapContainer
-          center={[44.70387397828586, 17.198186656460166]}
+          center={center[0]}
           zoom={15}
           scrollWheelZoom={true}
           style={{ height: "100%", width: "100%" }}
