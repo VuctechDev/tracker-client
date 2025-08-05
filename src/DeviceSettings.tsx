@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { Box, Typography, Popover } from "@mui/material";
+import { Box, Typography, Popover, Button } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import CommandCenter from "./CommandCenter";
 import { getRelativeTime } from "./utils/getDisplayDate";
 import { useDevicesPooling, type DeviceType } from "./queries/devices";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   deviceId: string;
 }
 
 const DeviceSettings: React.FC<Props> = ({ deviceId }) => {
+  const navigate = useNavigate();
   const { data: devicesData } = useDevicesPooling();
   const devices = devicesData?.data ?? [];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -52,7 +54,6 @@ const DeviceSettings: React.FC<Props> = ({ deviceId }) => {
             <Box sx={{ width: "100%" }}>
               <Typography variant="h6">IMEI: {device?.imei}</Typography>
             </Box>
-
             <Box sx={{ width: "50%" }}>
               <Typography>Battery: {device?.battery}%</Typography>
             </Box>
@@ -91,7 +92,7 @@ const DeviceSettings: React.FC<Props> = ({ deviceId }) => {
               </Typography>
             </Box>
           </Box>
-          {device?.status !== "offline" && isDev && (
+          {device?.status !== "offline" && !isDev && (
             <CommandCenter
               id={device?.imei}
               value={
@@ -100,6 +101,16 @@ const DeviceSettings: React.FC<Props> = ({ deviceId }) => {
               }
             />
           )}
+          <Box sx={{ mt: "12px" }}>
+            <Button
+              fullWidth
+              size="small"
+              variant="outlined"
+              onClick={() => navigate("/geofence", { state: { deviceId } })}
+            >
+              geofence
+            </Button>
+          </Box>
           <div style={{ marginTop: "6px" }}></div>
         </Box>
       </Popover>

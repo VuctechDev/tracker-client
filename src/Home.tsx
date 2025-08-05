@@ -5,7 +5,7 @@ import {
   Polyline,
   Marker,
   Popup,
-  useMapEvent,
+  Polygon,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
@@ -18,6 +18,7 @@ import SideBanner from "./SideBanner";
 import AccountMenu from "./AccountMenu";
 import { useDevicesPooling } from "./queries/devices";
 import { useGetRoute } from "./queries/route";
+import { useGetGeofence } from "./queries/geofence";
 
 const blueIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -52,25 +53,15 @@ const orangeDot = L.divIcon({
 
 interface Props {}
 
-const MapClickHandler = ({
-  onMapClick,
-}: {
-  onMapClick: (lat: number, lng: number) => void;
-}) => {
-  useMapEvent("click", (e) => {
-    const { lat, lng } = e.latlng;
-    onMapClick(lat, lng);
-  });
-
-  return null;
-};
-
 const Home: FC<Props> = () => {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [deviceId, setDeviceId] = useState<string>("");
   const [showRoute, setShowRoute] = useState<boolean>(
     !!localStorage.getItem("showRoute")
   );
+  const [showFence, setShowFence] = useState<boolean>(false);
+  const { data } = useGetGeofence(deviceId);
+
   const { data: routeData } = useGetRoute(deviceId);
   const { data: devicesData } = useDevicesPooling();
   const devices = devicesData?.data ?? [];
@@ -109,6 +100,8 @@ const Home: FC<Props> = () => {
     });
   };
 
+  const handleFenceDisplay = () => setShowFence((prev) => !prev);
+
   const routeDisplayData = showRoute ? route : route.slice(0, 1);
 
   return (
@@ -122,6 +115,7 @@ const Home: FC<Props> = () => {
         data={routeData?.data[0]}
         showRoute={showRoute}
         handleVariantChange={handleVariantChange}
+        handleFenceDisplay={handleFenceDisplay}
       />
       <div className="mapWrapper">
         {/* {loading && <Typography>Loading...</Typography>}
@@ -136,10 +130,6 @@ const Home: FC<Props> = () => {
             style={{ height: "100%", width: "100%" }}
             zoomControl={false}
           >
-            <MapClickHandler
-              onMapClick={(lat, lng) => console.log("Clicked at:", lat, lng)}
-            />
-
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -186,6 +176,17 @@ const Home: FC<Props> = () => {
 
             {routeDisplayData.length > 1 && (
               <Polyline positions={route} color="orange" />
+            )}
+
+            {showFence && (
+              <Polygon
+                positions={data?.data?.coordinates ?? []}
+                pathOptions={{
+                  color: "blue",
+                  fillColor: "blue",
+                  fillOpacity: 0.2,
+                }}
+              />
             )}
           </MapContainer>
         )}
