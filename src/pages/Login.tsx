@@ -5,7 +5,7 @@ import { request } from "../utils/api";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const code = useRef("");
+  const code = useRef(localStorage.getItem("code") ?? "");
   const login = async () => {
     try {
       const data = await request("/auth/start-session", "POST", {
@@ -13,6 +13,7 @@ const LoginPage = () => {
       });
 
       localStorage.setItem("token", data.token);
+      localStorage.setItem("code", code.current);
       navigate("/");
     } catch (error) {
       alert("ERROR");

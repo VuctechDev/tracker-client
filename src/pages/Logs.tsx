@@ -1,6 +1,6 @@
 import { useEffect, useState, type FC } from "react";
-import { request } from "./utils/api";
-import { useDevicesPooling } from "./queries/devices";
+import { request } from "../utils/api";
+import { useDevicesPooling } from "../queries/devices";
 
 interface Props {}
 

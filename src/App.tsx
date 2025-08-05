@@ -1,12 +1,13 @@
 import AuthProvider from "./AuthProvider";
 import Home from "./Home";
-import Logs from "./Logs";
+import Logs from "./pages/Logs";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import LoginPage from "./pages/Login";
 import QueryProvider from "./QueryProvider";
 import LogOut from "./components/LogOut";
 import Box from "@mui/material/Box";
 import Backoffice from "./pages/Backoffice";
+import GeoFence from "./pages/GeoFence";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
                 <Route path="/logs" element={<Logs />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/bo" element={<Backoffice />} />
+                <Route path="/geofence" element={<GeoFence />} />
               </Routes>
             </Box>
           </>
