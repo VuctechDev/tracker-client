@@ -59,18 +59,6 @@ const MapClickHandler = ({
 
   return null;
 };
-// email   String   @unique
-// lang    String
-
-// model geofences {
-//   id        Int      @id @default(autoincrement())
-//   deviceId  Int      @unique
-//   coordinates Json
-
-//   device    devices  @relation(fields: [deviceId], references: [id], onDelete: Cascade)
-// }
-
-// geofence       geofences?
 
 interface Props {}
 
@@ -94,10 +82,10 @@ const GeoFence: React.FC<Props> = () => {
   const handleSave = async () => {
     if (!data) {
       await request("/geofence", "POST", { coordinates: fence, deviceId });
-      alert("Kreirano!");
+      alert("Created!");
     } else {
       await request("/geofence", "PATCH", { coordinates: fence, deviceId });
-      alert("Sacuvano!");
+      alert("Saved!");
     }
     navigate("/");
   };

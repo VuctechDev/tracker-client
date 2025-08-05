@@ -92,7 +92,7 @@ const DeviceSettings: React.FC<Props> = ({ deviceId }) => {
               </Typography>
             </Box>
           </Box>
-          {device?.status !== "offline" && !isDev && (
+          {device?.status !== "offline" && isDev && (
             <CommandCenter
               id={device?.imei}
               value={
