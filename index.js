@@ -28,21 +28,35 @@ const vanS = {
   latitude: 44.69889100913762,
 };
 
-const unutra2 = {
-  longitude: 17.19619452953339,
-  latitude: 44.70356567923518,
+const vanTest = {
+  longitude: 17.2098,
+  latitude: 44.71111,
 };
-// 60 * 60 *
+
+const vanTest2 = {
+  longitude: 17.197732101267324,
+  latitude: 44.71263772899172,
+};
+const IMEI = "4oho53h435o";
+// const IMEI = "0861261021070616";
+//
+const url = "http://localhost:2302/test/new-location";
+// const url =
+//   "https://jcgoccsc04oc88s0co848wo0.vuctechdev.online/test/new-location";
+const token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwib3JnYW5pemF0aW9uSWQiOjEsImlhdCI6MTc1NDA0NzkxOH0.qJ3N9PP5Yu3IEHX1h2flvgNnduIE08TZi-NmA9Ei1PM";
+
 const a = async () => {
-  const r = await fetch("http://localhost:2302/test/new-location", {
+  const r = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
     },
     method: "POST",
     body: JSON.stringify({
-      imei: "4oho53h435o",
-      ...vanNW,
-      speed: 22,
+      imei: IMEI,
+      ...vanTest,
+      speed: 9,
     }),
   });
 };

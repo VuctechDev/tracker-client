@@ -17,6 +17,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import * as turf from "@turf/turf";
 import { request } from "../utils/api";
 import { useGetGeofence } from "../queries/geofence";
+import { useTranslation } from "react-i18next";
 
 function segmentsFromPoints(points: [number, number][]) {
   const segments: [number, number][][] = [];
@@ -68,24 +69,25 @@ const blueIcon = new L.Icon({
   iconAnchor: [12, 41],
 });
 
-const GeoFence: React.FC<Props> = () => {
+const Geofence: React.FC<Props> = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const { deviceId, center } = location.state;
   const [fence, setFence] = useState<LatLngExpression[]>([]);
 
   const { data } = useGetGeofence(deviceId);
-  console.log(data);
+
   const handleUndo = () => setFence((prev) => prev.slice(0, -1));
   const handleReset = () => setFence([]);
   const handleBack = () => navigate("/");
   const handleSave = async () => {
     if (!data?.data) {
       await request("/geofence", "POST", { coordinates: fence, deviceId });
-      alert("Created!");
+      alert(`${t("created")}!`);
     } else {
       await request("/geofence", "PATCH", { coordinates: fence, deviceId });
-      alert("Saved!");
+      alert(`${t("saved")}!`);
     }
     navigate("/");
   };
@@ -160,11 +162,11 @@ const GeoFence: React.FC<Props> = () => {
               const newPoint: [number, number] = [lat, lng];
               const fenceArray = fence as [number, number][];
               if (fenceArray.length === 10) {
-                alert("10 points max");
+                alert(`${t("10pointsMax")}!`);
                 return;
               }
               if (hasIntersection(fenceArray, newPoint)) {
-                alert("Line intersects with previous segment!");
+                alert(`${t("lineIntersects")}!`);
                 return;
               }
               setFence((prev) => [...prev, newPoint]);
@@ -195,4 +197,4 @@ const GeoFence: React.FC<Props> = () => {
   );
 };
 
-export default GeoFence;
+export default Geofence;

@@ -8,12 +8,14 @@ import {
   Popover,
 } from "@mui/material";
 import { useDevicesPooling } from "./queries/devices";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   onSelect: (imei: string) => void;
 }
 
 const DevicesSelect: React.FC<Props> = ({ onSelect }) => {
+  const { t } = useTranslation();
   const { data: devicesData } = useDevicesPooling();
   const devices = devicesData?.data ?? [];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -31,7 +33,9 @@ const DevicesSelect: React.FC<Props> = ({ onSelect }) => {
   return (
     <>
       <Box className="mobileNavVevices" onClick={handleClick}>
-        <Typography variant="body1">Uredjaji: {devices?.length}</Typography>{" "}
+        <Typography variant="body1">
+          {t("devices")} {devices?.length}
+        </Typography>
       </Box>
       <Popover
         open={open}

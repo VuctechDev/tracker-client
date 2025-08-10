@@ -1,7 +1,9 @@
 import { Button } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 const LogOut = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const logOut = () => {
@@ -10,7 +12,7 @@ const LogOut = () => {
   };
   return (
     <Button size="small" onClick={logOut}>
-      Odjava
+      {t("logOut")}
     </Button>
   );
 };

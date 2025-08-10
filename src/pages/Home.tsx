@@ -10,15 +10,16 @@ import {
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import L, { type LatLngExpression } from "leaflet";
-import { getRelativeTime } from "./utils/getDisplayDate";
-import CommandCenter from "./CommandCenter";
-import DevicesSelect from "./DevicesSelect";
-import DeviceSettings from "./DeviceSettings";
-import SideBanner from "./SideBanner";
-import AccountMenu from "./AccountMenu";
-import { useDevicesPooling } from "./queries/devices";
-import { useGetRoute } from "./queries/route";
-import { useGetGeofence } from "./queries/geofence";
+import { getRelativeTime } from "../utils/getDisplayDate";
+import DevicesSelect from "../DevicesSelect";
+import DeviceSettings from "../DeviceSettings";
+import SideBanner from "../SideBanner";
+import AccountMenu from "../AccountMenu";
+import { useDevicesPooling } from "../queries/devices";
+import { useGetRoute } from "../queries/route";
+import { useGetGeofence } from "../queries/geofence";
+import CommandCenter from "../components/CommandCenter";
+import Loading from "../components/Loading";
 
 const blueIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -62,7 +63,7 @@ const Home: FC<Props> = () => {
   const [showFence, setShowFence] = useState<boolean>(false);
   const { data } = useGetGeofence(deviceId);
 
-  const { data: routeData } = useGetRoute(deviceId);
+  const { data: routeData, isFetching, isFetched } = useGetRoute(deviceId);
   const { data: devicesData } = useDevicesPooling();
   const devices = devicesData?.data ?? [];
 
@@ -121,8 +122,8 @@ const Home: FC<Props> = () => {
         handleFenceDisplay={handleFenceDisplay}
       />
       <div className="mapWrapper">
-        {/* {loading && <Typography>Loading...</Typography>}
-        {!loading && !routeDisplayData?.length && (
+        {isFetching && !isFetched && <Loading />}
+        {/* {!loading && !routeDisplayData?.length && (
           <Typography>No records yet received from the device!</Typography>
         )} */}
         {!!routeDisplayData?.length && (
