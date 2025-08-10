@@ -23,6 +23,10 @@
   "offline": "Offline",
   "static": "Static",
   "dynamic": "Dynamic",
+  "reading": "Reading",
+  "speed": "Speed",
+  "when": "When",
+  "pause": "Pause",
   "relativeTime": {
     "seconds": "{{count}} second ago",
     "seconds_plural": "{{count}} seconds ago",

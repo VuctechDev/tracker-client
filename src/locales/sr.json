@@ -23,6 +23,10 @@
   "offline": "Ugašen",
   "static": "Statičan",
   "dynamic": "U pokretu",
+  "reading": "Očitavanje",
+  "speed": "Brzina",
+  "when": "Kada",
+  "pause": "Pauza",
   "relativeTime": {
     "seconds": "pre {{count}} sekundu",
     "seconds_plural": "pre {{count}} sekundi",

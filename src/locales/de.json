@@ -23,6 +23,10 @@
   "offline": "Offline",
   "static": "Statisch",
   "dynamic": "Dynamisch",
+  "reading": "Lesen",
+  "speed": "Geschwindigkeit",
+  "when": "Wann",
+  "pause": "Pause",
   "relativeTime": {
     "seconds": "vor {{count}} Sekunde",
     "seconds_plural": "vor {{count}} Sekunden",

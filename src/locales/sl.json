@@ -23,6 +23,10 @@
   "offline": "Nepovezan",
   "static": "Statično",
   "dynamic": "Dinamično",
+  "reading": "Branje",
+  "speed": "Hitrost",
+  "when": "Kdaj",
+  "pause": "Premor",
   "relativeTime": {
     "seconds": "pred {{count}} sekundo",
     "seconds_plural": "pred {{count}} sekundami",
