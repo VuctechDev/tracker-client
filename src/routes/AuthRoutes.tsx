@@ -3,7 +3,7 @@ import Home from "../pages/Home";
 import Logs from "../pages/Logs";
 import Backoffice from "../pages/Backoffice";
 import AuthLayout from "../layouts/AuthLayout";
-import Geofence from "../pages/Geofence";
+import Geofence from "../pages/Geofence2";
 
 export default function AuthRoutes() {
   return (
