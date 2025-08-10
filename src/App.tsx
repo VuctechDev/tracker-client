@@ -1,46 +1,32 @@
 import AuthProvider from "./AuthProvider";
-import Home from "./Home";
-import Logs from "./pages/Logs";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import LoginPage from "./pages/Login";
-import QueryProvider from "./QueryProvider";
-import LogOut from "./components/LogOut";
-import Box from "@mui/material/Box";
-import Backoffice from "./pages/Backoffice";
-import GeoFence from "./pages/GeoFence";
+import { BrowserRouter as Router } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
+import { useGetOrganization } from "./queries/organizations";
+import AuthRoutes from "./routes/AuthRoutes";
+import PublicRoutes from "./routes/PublicRoutes";
+import Loading from "./components/Loading";
 
 export default function App() {
-  return (
-    <QueryProvider>
-      <Router>
-        <AuthProvider>
-          <>
-            <Box
-              style={{ display: "flex", columnGap: "10px", padding: "10px" }}
-              className="header"
-            >
-              <Link to="/">Home</Link>
-              <Link to="/logs">Logs</Link>
-              <Box
-                width={1}
-                sx={{ display: "flex", justifyContent: "flex-end" }}
-              >
-                <LogOut />
-              </Box>
-            </Box>
+  const { data, isLoading, isFetched } = useGetOrganization();
+  const { i18n } = useTranslation();
 
-            <Box className="wrapper" width={1}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/logs" element={<Logs />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/bo" element={<Backoffice />} />
-                <Route path="/geofence" element={<GeoFence />} />
-              </Routes>
-            </Box>
-          </>
-        </AuthProvider>
-      </Router>
-    </QueryProvider>
+  useEffect(() => {
+    if (data?.data) i18n.changeLanguage(data?.data?.lang);
+  }, [i18n, data?.data]);
+
+  if (isLoading && !isFetched) {
+    return <Loading />;
+  }
+
+  return (
+    <Router>
+      <AuthProvider>
+        <>
+          <AuthRoutes />
+          <PublicRoutes />
+        </>
+      </AuthProvider>
+    </Router>
   );
 }

@@ -1,5 +1,5 @@
 import { useRef, type FC } from "react";
-import { request } from "./utils/api";
+import { request } from "../utils/api";
 
 interface Props {
   id: string;

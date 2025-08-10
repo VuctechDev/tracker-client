@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Box, Typography, Popover, Button } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import CommandCenter from "./CommandCenter";
 import { getRelativeTime } from "./utils/getDisplayDate";
 import { useDevicesPooling, type DeviceType } from "./queries/devices";
 import { useNavigate } from "react-router-dom";
 import type { LatLngExpression } from "leaflet";
+import CommandCenter from "./components/CommandCenter";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   deviceId: string;
@@ -13,6 +14,7 @@ interface Props {
 }
 
 const DeviceSettings: React.FC<Props> = ({ deviceId, center }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: devicesData } = useDevicesPooling();
   const devices = devicesData?.data ?? [];
@@ -54,33 +56,43 @@ const DeviceSettings: React.FC<Props> = ({ deviceId, center }) => {
         <Box sx={{ p: 1.5, width: "100%" }} className="devicesCardWrapper2">
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
             <Box sx={{ width: "100%" }}>
-              <Typography variant="h6">IMEI: {device?.imei}</Typography>
+              <Typography variant="h6">
+                {t("imei")}: {device?.imei}
+              </Typography>
             </Box>
             <Box sx={{ width: "50%" }}>
-              <Typography>Battery: {device?.battery}%</Typography>
+              <Typography>
+                {t("battery")}: {device?.battery}%
+              </Typography>
             </Box>
             <Box sx={{ width: "50%" }}>
-              <Typography>Signal: {device?.signal}%</Typography>
+              <Typography>
+                {t("signal")}: {device?.signal}%
+              </Typography>
             </Box>
             <Box sx={{ width: "50%" }}>
-              <Typography>Status: {device?.status?.toUpperCase()}</Typography>
+              <Typography>
+                {t("status")}: {t(device?.status).toUpperCase()}
+              </Typography>
             </Box>
             <Box sx={{ width: "50%" }}>
-              <Typography>Version: {device?.version}</Typography>
+              <Typography>
+                {t("version")}: {device?.version}
+              </Typography>
             </Box>
             <Box sx={{ width: "100%", mt: "6px" }}>
               <Typography>
-                Distance in 24h: {device?.analytics?.last24h}m
+                {t("24hDistance")} {device?.analytics?.last24h}m
               </Typography>
             </Box>
             <Box sx={{ width: "100%" }}>
               <Typography>
-                Distance in last hour: {device?.analytics?.lastHour}m
+                {t("lastHourDistance")} {device?.analytics?.lastHour}m
               </Typography>
             </Box>
             <Box sx={{ width: "100%" }}>
               <Typography>
-                Last kilometer made:{" "}
+                {t("lastKilometerMadeIn")}{" "}
                 {device?.analytics?.lastKilometerReachedAt
                   ? getRelativeTime(
                       `${new Date(device?.analytics?.lastKilometerReachedAt)}`
@@ -90,7 +102,7 @@ const DeviceSettings: React.FC<Props> = ({ deviceId, center }) => {
             </Box>
             <Box sx={{ width: "100%", mt: "6px" }}>
               <Typography>
-                Last update: {getRelativeTime(device?.updatedAt)}
+                {t("lastUpdate")}: {getRelativeTime(device?.updatedAt)}
               </Typography>
             </Box>
           </Box>
@@ -112,7 +124,7 @@ const DeviceSettings: React.FC<Props> = ({ deviceId, center }) => {
                 navigate("/geofence", { state: { deviceId, center } })
               }
             >
-              geofence
+              {t("geofence")}
             </Button>
           </Box>
           <div style={{ marginTop: "6px" }}></div>

@@ -2,8 +2,10 @@ import { Box, Button, TextField } from "@mui/material";
 import { useRef, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { request } from "../utils/api";
+import { useTranslation } from "react-i18next";
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const code = useRef(localStorage.getItem("code") ?? "");
   const login = async () => {
@@ -21,9 +23,9 @@ const LoginPage = () => {
   };
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     code.current = e.target.value;
   };
+
   return (
     <Box
       sx={{
@@ -36,9 +38,14 @@ const LoginPage = () => {
         rowGap: "16px",
       }}
     >
-      <TextField variant="outlined" label="Lozinka" onChange={handleInput} />
+      <TextField
+        variant="outlined"
+        label="Lozinka"
+        onChange={handleInput}
+        defaultValue={localStorage.getItem("code")}
+      />
       <Button onClick={login} variant="contained">
-        Prijava
+        {t("signIn")}
       </Button>
     </Box>
   );

@@ -1,3 +1,5 @@
+import i18n from "../i18n";
+
 const hour = 60 * 1000 * 60;
 
 const getFromUTC = (time: string): number => {
@@ -38,21 +40,33 @@ export function getRelativeTime(date: string): string {
   const diffSec = Math.floor(diffMs / 1000);
 
   if (diffSec < 60) {
-    return `${diffSec} sec${diffSec !== 1 ? "s" : ""} ago`;
+    return i18n.t(`relativeTime.seconds`, {
+      count: diffSec,
+      plural: diffSec !== 1 ? "plural" : "",
+    });
   }
 
   const diffMin = Math.floor(diffSec / 60);
   if (diffMin < 60) {
-    return `${diffMin} min${diffMin !== 1 ? "s" : ""} ago`;
+    return i18n.t(`relativeTime.minutes`, {
+      count: diffMin,
+      plural: diffMin !== 1 ? "plural" : "",
+    });
   }
 
   const diffHours = Math.floor(diffMin / 60);
   if (diffHours < 24) {
-    return `${diffHours} hour${diffHours !== 1 ? "s" : ""} ago`;
+    return i18n.t(`relativeTime.hours`, {
+      count: diffHours,
+      plural: diffHours !== 1 ? "plural" : "",
+    });
   }
 
   const diffDays = Math.floor(diffHours / 24);
-  return `${diffDays} day${diffDays !== 1 ? "s" : ""} ago`;
+  return i18n.t(`relativeTime.days`, {
+    count: diffDays,
+    plural: diffDays !== 1 ? "plural" : "",
+  });
 }
 
 // const months = [
