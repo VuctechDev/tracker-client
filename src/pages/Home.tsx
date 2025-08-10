@@ -20,6 +20,7 @@ import { useGetRoute } from "../queries/route";
 import { useGetGeofence } from "../queries/geofence";
 import CommandCenter from "../components/CommandCenter";
 import Loading from "../components/Loading";
+import { useTranslation } from "react-i18next";
 
 const blueIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -55,6 +56,7 @@ const orangeDot = L.divIcon({
 interface Props {}
 
 const Home: FC<Props> = () => {
+  const { t } = useTranslation();
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [deviceId, setDeviceId] = useState<string>("");
   const [showRoute, setShowRoute] = useState<boolean>(
@@ -164,13 +166,14 @@ const Home: FC<Props> = () => {
               return (
                 <Marker key={i} position={position} icon={icon}>
                   <Popup>
-                    Reading #{i + 1} <br />
-                    Speed: {routeData?.data[i]?.speed} km/h <br />
-                    When: {getRelativeTime(routeData?.data[i]?.createdAt ?? "")}
+                    {t("reading")} #{i + 1} <br />
+                    {t("speed")}: {routeData?.data[i]?.speed} km/h <br />
+                    {t("when")}:{" "}
+                    {getRelativeTime(routeData?.data[i]?.createdAt ?? "")}
                     {isTimeGap && (
                       <>
                         <br />
-                        Pause: {displayTime}
+                        {t("pause")}: {displayTime}
                       </>
                     )}
                   </Popup>
