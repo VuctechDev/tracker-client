@@ -16,8 +16,7 @@ interface Props {
 const DeviceSettings: React.FC<Props> = ({ deviceId, center }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { data: devicesData } = useDevicesPooling();
-  const devices = devicesData?.data ?? [];
+  const { devices } = useDevicesPooling();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {

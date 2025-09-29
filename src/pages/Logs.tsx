@@ -15,9 +15,10 @@ const Logs: FC<Props> = () => {
       createdAt: string;
     }[]
   >([]);
-  const { data: devicesData } = useDevicesPooling();
-  const devices = devicesData?.data ?? [];
-  const [imei, setImei] = useState(devices?.[0]?.imei);
+  const { devices } = useDevicesPooling();
+  const [imei, setImei] = useState(
+    localStorage.getItem("selectedDeviceId") ?? devices?.[0]?.imei
+  );
 
   const getLogs = async () => {
     const data = await request(`/logs/${imei}`);

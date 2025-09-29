@@ -25,7 +25,7 @@ export type DeviceType = {
 };
 
 export const useDevicesPooling = () => {
-  return useQuery({
+  const query = useQuery({
     queryKey: ["devices"],
     queryFn: () => request(`/devices`) as Promise<{ data: DeviceType[] }>,
     refetchInterval: 30_000,
@@ -34,6 +34,11 @@ export const useDevicesPooling = () => {
     staleTime: 60_000,
     placeholderData: { data: [] },
   });
+
+  return {
+    ...query,
+    devices: query.data?.data ?? ([] as DeviceType[]),
+  };
 };
 
 export const useGetDevices = () => {

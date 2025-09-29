@@ -1,73 +1,36 @@
 import type { FC } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Polyline,
-  Marker,
-  Popup,
-  Polygon,
-} from "react-leaflet";
+
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
-import L, { type LatLngExpression } from "leaflet";
+import { type LatLngExpression } from "leaflet";
 import { getRelativeTime } from "../utils/getDisplayDate";
-import DevicesSelect from "../DevicesSelect";
-import DeviceSettings from "../DeviceSettings";
+// import DevicesSelect from "../DevicesSelect";
+// import DeviceSettings from "../DeviceSettings";
 import SideBanner from "../SideBanner";
-import AccountMenu from "../AccountMenu";
+// import AccountMenu from "../AccountMenu";
 import { useDevicesPooling } from "../queries/devices";
 import { useGetRoute } from "../queries/route";
-import { useGetGeofence } from "../queries/geofence";
 import CommandCenter from "../components/CommandCenter";
 import Loading from "../components/Loading";
-import { useTranslation } from "react-i18next";
-
-const blueIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-});
-
-const redDot = L.divIcon({
-  className: "",
-  html: `<div style="
-      background-color: red;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      box-shadow: 0 0 2px rgba(0,0,0,0.5);
-    "></div>`,
-  iconSize: [10, 10],
-  iconAnchor: [5, 5],
-});
-const orangeDot = L.divIcon({
-  className: "",
-  html: `<div style="
-      background-color: green;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      box-shadow: 0 0 2px rgba(0,0,0,0.5);
-    "></div>`,
-  iconSize: [10, 10],
-  iconAnchor: [5, 5],
-});
+import NavDrawer from "../components/NavDrawer";
+import HomeMap from "../components/home/Map";
+import TopNav from "../components/TopNav";
+import Box from "@mui/material/Box";
 
 interface Props {}
 
 const Home: FC<Props> = () => {
-  const { t } = useTranslation();
   const [route, setRoute] = useState<LatLngExpression[]>([]);
-  const [deviceId, setDeviceId] = useState<string>("");
+  const [deviceId, setDeviceId] = useState<string>(
+    localStorage.getItem("selectedDeviceId") ?? ""
+  );
   const [showRoute, setShowRoute] = useState<boolean>(
     !!localStorage.getItem("showRoute")
   );
   const [showFence, setShowFence] = useState<boolean>(false);
-  const { data } = useGetGeofence(deviceId);
 
   const { data: routeData, isFetching, isFetched } = useGetRoute(deviceId);
-  const { data: devicesData } = useDevicesPooling();
-  const devices = devicesData?.data ?? [];
+  const { devices } = useDevicesPooling();
 
   useEffect(() => {
     if (devices?.length && !deviceId) {
@@ -89,6 +52,7 @@ const Home: FC<Props> = () => {
     if (id !== deviceId) {
       setDeviceId(id);
       setRoute([]);
+      localStorage.setItem("selectedDeviceId", id);
     }
   };
 
@@ -108,14 +72,20 @@ const Home: FC<Props> = () => {
   const routeDisplayData = showRoute ? route : route.slice(0, 1);
 
   return (
-    <div className="wrapper">
-      <div className="mobileNav">
-        <AccountMenu />
-        {deviceId && (
-          <DeviceSettings deviceId={deviceId} center={route?.slice(0, 1)} />
-        )}
-        <DevicesSelect onSelect={selectDevice} />
-      </div>
+    <Box
+      sx={(theme) => ({
+        width: "100%",
+        height: "100vh",
+        display: "flex",
+        [theme.breakpoints.down("sm")]: {
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          paddingTop: "50px",
+          height: "99vh",
+        },
+      })}
+    >
+      <TopNav selectDevice={selectDevice} />
       <SideBanner
         deviceId={deviceId}
         data={routeData?.data[0]}
@@ -129,73 +99,11 @@ const Home: FC<Props> = () => {
           <Typography>No records yet received from the device!</Typography>
         )} */}
         {!!routeDisplayData?.length && (
-          <MapContainer
-            center={route[0] ?? [0, 0]}
-            zoom={17}
-            scrollWheelZoom={true}
-            style={{ height: "100%", width: "100%" }}
-            zoomControl={false}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-
-            {routeDisplayData.map((position, i) => {
-              const curr = routeData?.data[i];
-              const prev = routeData?.data[i + 1];
-
-              const currTime = new Date(curr?.createdAt || 0).getTime();
-              const prevTime = new Date(prev?.createdAt || 0).getTime();
-
-              const diffMs = Math.abs(currTime - prevTime);
-              const isTimeGap = i > 0 && diffMs > 60_000 && prev;
-
-              const icon = i === 0 ? blueIcon : isTimeGap ? orangeDot : redDot;
-
-              const hours = Math.floor(diffMs / 3600000);
-              const minutes = Math.floor((diffMs % 3600000) / 60000);
-              const seconds = Math.floor((diffMs % 60000) / 1000);
-
-              const displayTime =
-                isTimeGap &&
-                `${String(hours).padStart(2, "0")}h ${String(minutes).padStart(
-                  2,
-                  "0"
-                )}m ${String(seconds).padStart(2, "0")}s`;
-              return (
-                <Marker key={i} position={position} icon={icon}>
-                  <Popup>
-                    {t("reading")} #{i + 1} <br />
-                    {t("speed")}: {routeData?.data[i]?.speed} km/h <br />
-                    {t("when")}:{" "}
-                    {getRelativeTime(routeData?.data[i]?.createdAt ?? "")}
-                    {isTimeGap && (
-                      <>
-                        <br />
-                        {t("pause")}: {displayTime}
-                      </>
-                    )}
-                  </Popup>
-                </Marker>
-              );
-            })}
-
-            {routeDisplayData.length > 1 && (
-              <Polyline positions={route} color="orange" />
-            )}
-
-            {showFence && (
-              <Polygon
-                positions={data?.data?.coordinates ?? []}
-                pathOptions={{
-                  color: "blue",
-                  fillColor: "blue",
-                  fillOpacity: 0.2,
-                }}
-              />
-            )}
-          </MapContainer>
+          <HomeMap
+            deviceId={deviceId}
+            routeData={routeDisplayData}
+            showFence={showFence}
+          />
         )}
       </div>
       <div className="devicesCardWrapper">
@@ -240,7 +148,8 @@ const Home: FC<Props> = () => {
           </div>
         ))}
       </div>
-    </div>
+      <NavDrawer deviceId={deviceId} center={route?.slice(0, 1)} />
+    </Box>
   );
 };
 
