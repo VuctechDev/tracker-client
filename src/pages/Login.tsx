@@ -16,7 +16,7 @@ const LoginPage = () => {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("code", code.current);
-      navigate("/");
+      navigate("/", { replace: true });
     } catch (error) {
       alert("ERROR");
     }

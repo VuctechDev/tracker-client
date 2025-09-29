@@ -120,7 +120,10 @@ const DeviceSettings: React.FC<Props> = ({ deviceId, center }) => {
               size="small"
               variant="outlined"
               onClick={() =>
-                navigate("/geofence", { state: { deviceId, center } })
+                navigate("/geofence", {
+                  state: { deviceId, center },
+                  replace: true,
+                })
               }
             >
               {t("geofence")}

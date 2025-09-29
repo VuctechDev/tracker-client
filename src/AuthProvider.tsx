@@ -12,7 +12,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
 
   useEffect(() => {
     if (!token) {
-      navigate("/login");
+      navigate("/login", { replace: true });
     }
   }, [location.pathname]);
 

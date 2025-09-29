@@ -32,7 +32,7 @@ const NavDrawer: React.FC<Props> = ({ deviceId, center }) => {
     <Box
       sx={{
         width: "100vw",
-        height: "160px",
+        height: "170px",
         paddingTop: "12px",
         // height: height ? "70vh" : "18vh",
         backgroundColor: "#fff",
@@ -58,7 +58,12 @@ const NavDrawer: React.FC<Props> = ({ deviceId, center }) => {
         </Typography>
         <Button
           variant="contained"
-          onClick={() => navigate("/geofence", { state: { deviceId, center } })}
+          onClick={() =>
+            navigate("/geofence", {
+              state: { deviceId, center },
+              replace: true,
+            })
+          }
         >
           {t("geofence")}
         </Button>

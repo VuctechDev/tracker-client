@@ -80,8 +80,8 @@ const Home: FC<Props> = () => {
         [theme.breakpoints.down("sm")]: {
           flexDirection: "column",
           justifyContent: "flex-start",
-          paddingTop: "50px",
-          height: "99vh",
+          paddingTop: "46px",
+          height: "100vh",
         },
       })}
     >
