@@ -9,15 +9,18 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import L, { type LatLngExpression } from "leaflet";
 import Box from "@mui/material/Box";
-import UndoIcon from "@mui/icons-material/Undo";
-import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as turf from "@turf/turf";
 import { request } from "../utils/api";
 import { useGetGeofence } from "../queries/geofence";
 import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faRotateLeft,
+  faTrashCan,
+  faFloppyDisk,
+  faCircleLeft,
+} from "@fortawesome/free-solid-svg-icons";
 
 function segmentsFromPoints(points: [number, number][]) {
   const segments: [number, number][][] = [];
@@ -93,10 +96,42 @@ const Geofence: React.FC<Props> = () => {
   };
 
   const icons = [
-    { content: <ChevronLeftIcon />, callback: handleBack },
-    { content: <SaveAltIcon />, callback: handleSave },
-    { content: <DeleteOutlineIcon />, callback: handleReset },
-    { content: <UndoIcon />, callback: handleUndo },
+    {
+      content: (
+        <FontAwesomeIcon
+          icon={faCircleLeft}
+          style={{ fontSize: "22px", fontWeight: 700 }}
+        />
+      ),
+      callback: handleBack,
+    },
+    {
+      content: (
+        <FontAwesomeIcon
+          icon={faFloppyDisk}
+          style={{ fontSize: "22px", fontWeight: 700 }}
+        />
+      ),
+      callback: handleSave,
+    },
+    {
+      content: (
+        <FontAwesomeIcon
+          icon={faTrashCan}
+          style={{ fontSize: "18px", fontWeight: 700 }}
+        />
+      ),
+      callback: handleReset,
+    },
+    {
+      content: (
+        <FontAwesomeIcon
+          icon={faRotateLeft}
+          style={{ fontSize: "18px", fontWeight: 700 }}
+        />
+      ),
+      callback: handleUndo,
+    },
   ];
 
   useEffect(() => {
@@ -135,7 +170,7 @@ const Geofence: React.FC<Props> = () => {
             sx={{
               width: "60px",
               height: "40px",
-              border: "1px solid rgb(184, 180, 180)",
+              border: "1px solid rgb(120, 120, 120)",
               zIndex: 99999,
               p: "4px 6px",
               backgroundColor: "#fff",
@@ -149,7 +184,7 @@ const Geofence: React.FC<Props> = () => {
           </Box>
         ))}
       </Box>
-      <Box className="mapWrapper">
+      <Box className="mapWrapperGeofence">
         <MapContainer
           center={center[0]}
           zoom={15}
@@ -178,7 +213,7 @@ const Geofence: React.FC<Props> = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          <Marker position={[0, 0]} icon={blueIcon} />
+          <Marker position={center[0]} icon={blueIcon} />
 
           {fence.length > 0 && (
             <Polygon

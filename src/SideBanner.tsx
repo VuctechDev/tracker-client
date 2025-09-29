@@ -1,9 +1,12 @@
-import RouteIcon from "@mui/icons-material/Route";
 import Box from "@mui/material/Box";
-import DirectionsIcon from "@mui/icons-material/Directions";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import TransformIcon from "@mui/icons-material/Transform";
 import { useGetGeofence } from "./queries/geofence";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faDiamondTurnRight,
+  faRoute,
+  faCropSimple,
+  faLocationDot,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   deviceId: string;
@@ -21,11 +24,14 @@ const SideBanner: React.FC<Props> = ({
   handleFenceDisplay,
 }) => {
   const { data: geofence } = useGetGeofence(deviceId);
+
+  const displayGeofenceButton = !!geofence?.data?.coordinates?.length;
+
   return (
     <Box
       sx={{
         position: "fixed",
-        bottom: "20px",
+        bottom: "160px",
         right: "10px",
         width: "42px",
         zIndex: 9999,
@@ -33,35 +39,89 @@ const SideBanner: React.FC<Props> = ({
         flexDirection: "column",
         justifyContent: "flex-end",
         alignItems: "center",
-        rowGap: "20px",
-        border: "1px solid rgb(184, 180, 180)",
+        rowGap: "16px",
         borderRadius: "12px",
-        backgroundColor: "#fff",
         padding: "16px 0px",
       }}
     >
-      {!!geofence?.data && (
+      {displayGeofenceButton && (
         <Box
-          component="div"
+          sx={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "50%",
+            backgroundColor: "#fff",
+            border: "1px solid rgb(120, 120, 120)",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            cursor: "pointer",
+          }}
           onClick={handleFenceDisplay}
-          sx={{ cursor: "pointer" }}
         >
-          <TransformIcon color="success" fontSize="large" />
+          <FontAwesomeIcon
+            icon={faCropSimple}
+            style={{ fontSize: "22px", fontWeight: 400 }}
+          />
         </Box>
       )}
       {!!data && (
-        <a
-          href={`https://www.google.com/maps?q=${data.lat},${data.long}`}
-          target="_blank"
+        <Box
+          sx={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "50%",
+            backgroundColor: "#fff",
+            border: "1px solid rgb(120, 120, 120)",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            cursor: "pointer",
+          }}
         >
-          <DirectionsIcon color="primary" fontSize="large" />
-        </a>
+          <a
+            href={`https://www.google.com/maps?q=${data.lat},${data.long}`}
+            target="_blank"
+          >
+            <FontAwesomeIcon
+              icon={faDiamondTurnRight}
+              style={{ fontSize: "24px", fontWeight: 400, color: "#111827" }}
+            />
+          </a>
+        </Box>
       )}
-      <Box onClick={handleVariantChange} sx={{ cursor: "pointer" }}>
+      <Box
+        sx={{
+          width: "40px",
+          height: "40px",
+          borderRadius: "50%",
+          backgroundColor: "#fff",
+          border: "1px solid rgb(120, 120, 120)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          cursor: "pointer",
+          // userSelect: "none",
+          // outline: "none",
+          // "&:focus": { outline: "none" },
+          // "&:active": { boxShadow: "none" },
+        }}
+        onClick={handleVariantChange}
+        // tabIndex={-1}
+      >
         {showRoute ? (
-          <LocationOnIcon color="warning" fontSize="large" />
+          <FontAwesomeIcon
+            icon={faLocationDot}
+            style={{ fontSize: "22px", fontWeight: 400 }}
+          />
         ) : (
-          <RouteIcon color="warning" fontSize="large" />
+          <FontAwesomeIcon
+            icon={faRoute}
+            style={{ fontSize: "22px", fontWeight: 400 }}
+          />
         )}
       </Box>
     </Box>
