@@ -92,7 +92,7 @@ const Geofence: React.FC<Props> = () => {
       await request("/geofence", "PATCH", { coordinates: fence, deviceId });
       alert(`${t("saved")}!`);
     }
-    navigate("/");
+    navigate("/", { replace: true });
   };
 
   const icons = [
@@ -136,7 +136,7 @@ const Geofence: React.FC<Props> = () => {
 
   useEffect(() => {
     if (!deviceId) {
-      navigate("/");
+      navigate("/", { replace: true });
     }
   }, [deviceId]);
 

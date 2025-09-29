@@ -31,7 +31,7 @@ const SideBanner: React.FC<Props> = ({
     <Box
       sx={{
         position: "fixed",
-        bottom: "160px",
+        bottom: "170px",
         right: "10px",
         width: "42px",
         zIndex: 9999,

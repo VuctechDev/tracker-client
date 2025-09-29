@@ -1,9 +1,12 @@
 import { Routes, Route } from "react-router-dom";
+import { Suspense, lazy } from "react";
 import Home from "../pages/Home";
 import Logs from "../pages/Logs";
 import Backoffice from "../pages/Backoffice";
 import AuthLayout from "../layouts/AuthLayout";
-import Geofence from "../pages/Geofence2";
+import Loading from "../components/Loading";
+
+const Geofence = lazy(() => import("../pages/Geofence2"));
 
 export default function AuthRoutes() {
   return (
@@ -12,7 +15,15 @@ export default function AuthRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/logs" element={<Logs />} />
         <Route path="/bo" element={<Backoffice />} />
-        <Route path="/geofence" element={<Geofence />} />
+
+        <Route
+          path="/geofence"
+          element={
+            <Suspense fallback={<Loading/>}>
+              <Geofence />
+            </Suspense>
+          }
+        />
       </Route>
     </Routes>
   );

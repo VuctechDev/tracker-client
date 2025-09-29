@@ -8,7 +8,7 @@ const LogOut = () => {
 
   const logOut = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
   return (
     <Button size="small" onClick={logOut}>
