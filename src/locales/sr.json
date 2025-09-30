@@ -35,6 +35,13 @@
     "hours": "pre {{count}} sat",
     "hours_plural": "pre {{count}} sati",
     "days": "pre {{count}} dan",
-    "days_plural": "pre {{count}} dana"
+    "days_plural": "pre {{count}} dana",
+    "password": "Lozinka",
+    "preview": "Pregled",
+    "lastNDays_one": "Poslednji {{count}} dan",
+    "lastNDays_few": "Poslednja {{count}} dana",
+    "lastNDays_other": "Poslednjih {{count}} dana",
+    "save": "Sačuvaj",
+    "emptyMapSelectedFilter": "Trenutno nema zapisa za izabrani filter!"
   }
 }

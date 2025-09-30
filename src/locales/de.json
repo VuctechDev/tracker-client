@@ -36,5 +36,11 @@
     "hours_plural": "vor {{count}} Stunden",
     "days": "vor {{count}} Tag",
     "days_plural": "vor {{count}} Tagen"
-  }
+  },
+  "password": "Passwort",
+  "preview": "Vorschau",
+  "lastNDays_one": "Letzter {{count}} Tag",
+  "lastNDays_other": "Letzte {{count}} Tage",
+  "save": "Speichern",
+  "emptyMapSelectedFilter": "Keine Einträge für den ausgewählten Filter verfügbar!"
 }
