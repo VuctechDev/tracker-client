@@ -36,5 +36,13 @@
     "hours_plural": "pred {{count}} urami",
     "days": "pred {{count}} dnevom",
     "days_plural": "pred {{count}} dnevi"
-  }
+  },
+  "password": "Geslo",
+  "preview": "Predogled",
+  "lastNDays_one": "Zadnji {{count}} dan",
+  "lastNDays_two": "Zadnja {{count}} dneva",
+  "lastNDays_few": "Zadnje {{count}} dni",
+  "lastNDays_other": "Zadnjih {{count}} dni",
+  "save": "Shrani",
+  "emptyMapSelectedFilter": "Za izbrani filter ni zapisov!"
 }
