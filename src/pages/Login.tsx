@@ -40,7 +40,7 @@ const LoginPage = () => {
     >
       <TextField
         variant="outlined"
-        label="Lozinka"
+        label={t("password")}
         onChange={handleInput}
         defaultValue={localStorage.getItem("code")}
       />

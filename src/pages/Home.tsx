@@ -16,10 +16,14 @@ import NavDrawer from "../components/NavDrawer";
 import HomeMap from "../components/home/Map";
 import TopNav from "../components/TopNav";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { useTranslation } from "react-i18next";
 
 interface Props {}
 
 const Home: FC<Props> = () => {
+  const { t } = useTranslation();
+
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [deviceId, setDeviceId] = useState<string>(
     localStorage.getItem("selectedDeviceId") ?? ""
@@ -29,7 +33,7 @@ const Home: FC<Props> = () => {
   );
   const [showFence, setShowFence] = useState<boolean>(false);
 
-  const { data: routeData, isFetching, isFetched } = useGetRoute(deviceId);
+  const { data: routeData, isPending, isSuccess } = useGetRoute(deviceId);
   const { devices } = useDevicesPooling();
 
   useEffect(() => {
@@ -70,6 +74,7 @@ const Home: FC<Props> = () => {
   const handleFenceDisplay = () => setShowFence((prev) => !prev);
 
   const routeDisplayData = showRoute ? route : route.slice(0, 1);
+  const hasData = !!routeDisplayData?.length;
 
   return (
     <Box
@@ -94,11 +99,25 @@ const Home: FC<Props> = () => {
         handleFenceDisplay={handleFenceDisplay}
       />
       <div className="mapWrapper">
-        {isFetching && !isFetched && <Loading />}
-        {/* {!loading && !routeDisplayData?.length && (
-          <Typography>No records yet received from the device!</Typography>
-        )} */}
-        {!!routeDisplayData?.length && (
+        {isPending && !hasData && <Loading />}
+        {isSuccess && !hasData && !isPending && (
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              pt: "30%",
+              px: "30px",
+            }}
+          >
+            <Typography fontWeight={600} textAlign="center" variant="h5">
+              {t("emptyMapSelectedFilter")}
+            </Typography>
+          </Box>
+        )}
+
+        {hasData && (
           <HomeMap
             deviceId={deviceId}
             routeData={routeDisplayData}

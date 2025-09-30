@@ -133,7 +133,7 @@ let base = createTheme({
           "&:active": { backgroundColor: grey[400] },
         },
         outlined: {
-          borderColor: grey[300],
+          borderColor: grey[500],
           color: grey[800],
           "&:hover": { backgroundColor: grey[100] },
         },
