@@ -49,7 +49,7 @@ const TopNav: React.FC<Props> = ({ selectDevice }) => {
         position: "fixed",
         top: 0,
         left: 0,
-        zIndex: 99999999,
+        zIndex: 10,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",

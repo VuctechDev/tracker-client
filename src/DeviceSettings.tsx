@@ -1,12 +1,28 @@
-import { useState } from "react";
-import { Box, Typography, Popover, Button } from "@mui/material";
-import SettingsIcon from "@mui/icons-material/Settings";
+import { useState, useEffect, type ChangeEvent } from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  Dialog,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  type SelectChangeEvent,
+} from "@mui/material";
 import { getRelativeTime } from "./utils/getDisplayDate";
-import { useDevicesPooling, type DeviceType } from "./queries/devices";
+import {
+  useDevicesPooling,
+  useUpdateDeviceName,
+  type DeviceType,
+} from "./queries/devices";
 import { useNavigate } from "react-router-dom";
 import type { LatLngExpression } from "leaflet";
-import CommandCenter from "./components/CommandCenter";
 import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   deviceId: string;
@@ -16,123 +32,167 @@ interface Props {
 const DeviceSettings: React.FC<Props> = ({ deviceId, center }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { devices } = useDevicesPooling();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [open, setOpen] = useState<boolean>(false);
+  const [previewInterval, setPreviewInterval] = useState<string>(
+    localStorage.getItem("routePreviewInterval") ?? "3"
+  );
+  const [changedName, setChangedName] = useState<string>("");
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const { mutateAsync, isPending } = useUpdateDeviceName();
+
+  const handlePreviewChange = async (e: SelectChangeEvent) => {
+    const v = e.target.value as string;
+    setPreviewInterval(v);
+    localStorage.setItem("routePreviewInterval", v);
+    await queryClient.invalidateQueries({ queryKey: ["route", deviceId] });
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
   const device = devices.find((d) => d.imei === deviceId) ?? ({} as DeviceType);
 
-  const isDev = import.meta.env.VITE_NODE_ENV === "dev";
+  const handleDialog = () => setOpen((prev) => !prev);
+
+  const handleNameChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const v = e.target.value as string;
+    setChangedName(v);
+  };
+
+  const handleUpdate = async () => {
+    try {
+      await mutateAsync({ name: changedName, id: device?.id });
+      handleDialog();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    if (device?.name) {
+      setChangedName(device?.name);
+    }
+  }, [device]);
+
+  const disabled = changedName === device?.name || !changedName || isPending;
 
   return (
-    <>
-      <Box className="mobileNavVevices2" onClick={handleClick}>
-        <Typography variant="body1">{device?.name}</Typography> <SettingsIcon />
-      </Box>
-      <Popover
-        closeAfterTransition
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
+    <Box
+      sx={{
+        height: "100%",
+        width: "100%",
+        px: "18px",
+        pt: "4px",
+        pb: "8px",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-        style={{ marginTop: "4px" }}
       >
-        <Box sx={{ p: 1.5, width: "100%" }} className="devicesCardWrapper2">
-          <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-            <Box sx={{ width: "100%" }}>
-              <Typography variant="h6">
-                {t("imei")}: {device?.imei}
-              </Typography>
-            </Box>
-            <Box sx={{ width: "50%" }}>
-              <Typography>
-                {t("battery")}: {device?.battery}%
-              </Typography>
-            </Box>
-            <Box sx={{ width: "50%" }}>
-              <Typography>
-                {t("signal")}: {device?.signal}%
-              </Typography>
-            </Box>
-            <Box sx={{ width: "50%" }}>
-              <Typography>
-                {t("status")}: {t(device?.status).toUpperCase()}
-              </Typography>
-            </Box>
-            <Box sx={{ width: "50%" }}>
-              <Typography>
-                {t("version")}: {device?.version}
-              </Typography>
-            </Box>
-            <Box sx={{ width: "100%", mt: "6px" }}>
-              <Typography>
-                {t("24hDistance")} {device?.analytics?.last24h}m
-              </Typography>
-            </Box>
-            <Box sx={{ width: "100%" }}>
-              <Typography>
-                {t("lastHourDistance")} {device?.analytics?.lastHour}m
-              </Typography>
-            </Box>
-            <Box sx={{ width: "100%" }}>
-              <Typography>
-                {t("lastKilometerMadeIn")}{" "}
-                {device?.analytics?.lastKilometerReachedAt
-                  ? getRelativeTime(
-                      `${new Date(device?.analytics?.lastKilometerReachedAt)}`
-                    )
-                  : "--"}
-              </Typography>
-            </Box>
-            <Box sx={{ width: "100%", mt: "6px" }}>
-              <Typography>
-                {t("lastUpdate")}: {getRelativeTime(device?.updatedAt)}
-              </Typography>
-            </Box>
-          </Box>
-          {device?.status !== "offline" && isDev && (
-            <CommandCenter
-              id={device?.imei}
-              value={
-                devices.find((device) => device?.imei === device.imei)
-                  ?.interval ?? "60"
-              }
-            />
-          )}
-          <Box sx={{ mt: "12px" }}>
-            <Button
+        <Typography>
+          <span style={{ fontWeight: 600 }}>{t("imei")}:</span> {deviceId}
+        </Typography>
+
+        <FontAwesomeIcon
+          onClick={handleDialog}
+          style={{ fontSize: "20px", fontWeight: 400 }}
+          icon={faPenToSquare}
+        />
+      </Box>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+          my: "auto",
+          pt: "10px",
+        }}
+      >
+        <Button
+          variant="contained"
+          onClick={() =>
+            navigate("/geofence", {
+              state: { deviceId, center },
+              replace: true,
+            })
+          }
+        >
+          {t("geofence")}
+        </Button>
+
+        <FormControl sx={{ width: { xs: 150, sm: 150 } }}>
+          <InputLabel id="preview-label">{t("preview")}</InputLabel>
+          <Select
+            labelId="preview-label"
+            id="preview"
+            value={previewInterval}
+            label={t("preview")}
+            onChange={handlePreviewChange}
+            MenuProps={{ MenuListProps: { dense: true } }}
+          >
+            <MenuItem value="1">{t("lastNDays", { count: 1 })}</MenuItem>
+            <MenuItem value="3">{t("lastNDays", { count: 3 })}</MenuItem>
+            <MenuItem value="7">{t("lastNDays", { count: 7 })}</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          mt: "auto",
+        }}
+      >
+        <Typography variant="body2">
+          <span style={{ fontWeight: 600 }}>{t("version")}:</span>{" "}
+          {device?.version}
+        </Typography>
+        <Typography variant="body2">
+          <span style={{ fontWeight: 600 }}>{t("lastUpdate")}:</span>{" "}
+          {getRelativeTime(device?.updatedAt ?? "")}
+        </Typography>
+      </Box>
+      {open && (
+        <Dialog open={open} onClose={handleDialog}>
+          <Box
+            sx={{
+              width: "80vw",
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+              p: "20px",
+              backgroundColor: "#fff",
+              rowGap: "28px",
+            }}
+          >
+            <TextField
               fullWidth
-              size="small"
-              variant="outlined"
-              onClick={() =>
-                navigate("/geofence", {
-                  state: { deviceId, center },
-                  replace: true,
-                })
-              }
+              value={changedName}
+              onChange={handleNameChange}
+            />
+            <Button
+              disabled={disabled}
+              fullWidth
+              variant="contained"
+              onClick={handleUpdate}
             >
-              {t("geofence")}
+              {t("save")}
             </Button>
           </Box>
-          <div style={{ marginTop: "6px" }}></div>
-        </Box>
-      </Popover>
-    </>
+        </Dialog>
+      )}
+    </Box>
   );
 };
 

@@ -1,65 +1,31 @@
-import { useState } from "react";
-import {
-  Box,
-  List,
-  ListItem,
-  // ListItemText,
-  Popover,
-} from "@mui/material";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import LogOut from "./components/LogOut";
-
-// interface Props {}
+import { Box, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const AccountMenu: React.FC = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
+  const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
-    <>
-      <Box className="mobileNavVevices" onClick={handleClick}>
-        <PersonOutlineIcon fontSize="medium" />
-      </Box>
-      <Popover
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Button
+        variant="outlined"
+        onClick={() => {
+          localStorage.removeItem("token");
+          navigate("/login");
         }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        style={{ marginTop: "4px" }}
       >
-        <Box sx={{ p: 1, minWidth: 260 }}>
-          <List sx={{ paddingY: 0 }}>
-            <ListItem
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-              }}
-            >
-              {/* <ListItemText primary="stefan@gmail.com" /> */}
-              {/* <Box sx={{ height: "30px" }} /> */}
-              <LogOut />
-            </ListItem>
-          </List>
-        </Box>
-      </Popover>
-    </>
+        {t("logOut")}
+      </Button>
+    </Box>
   );
 };
 

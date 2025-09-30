@@ -28,11 +28,13 @@ body {
 .mapWrapper {
   width: 1000px;
   height: 100vh;
+  z-index: 1;
 }
 
 .mapWrapperGeofence {
   width: 1000px;
   height: 100vh;
+  z-index: 1;
 }
 
 .devicesCardWrapper {

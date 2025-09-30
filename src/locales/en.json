@@ -36,5 +36,11 @@
     "hours_plural": "{{count}} hours ago",
     "days": "{{count}} day ago",
     "days_plural": "{{count}} days ago"
-  }
+  },
+  "password": "Password",
+  "preview": "Preview",
+  "lastNDays_one": "Last {{count}} day",
+  "lastNDays_other": "Last {{count}} days",
+  "save": "Save",
+  "emptyMapSelectedFilter": "No records available for the selected filter!"
 }

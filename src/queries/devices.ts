@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { request } from "../utils/api";
 import type { OrganizationType } from "./organizations";
 
@@ -45,5 +45,18 @@ export const useGetDevices = () => {
   return useQuery({
     queryKey: ["bo_devices"],
     queryFn: () => request(`/bo/devices`) as Promise<{ data: DeviceType[] }>,
+  });
+};
+
+export const useUpdateDeviceName = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["devices", "updateName"],
+    mutationFn: ({ id, name }: { id: number; name: string }) =>
+      request(`/devices/${id}`, "PATCH", { name }) as Promise<any>,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["devices"] });
+    },
   });
 };
