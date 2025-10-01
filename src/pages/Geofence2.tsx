@@ -9,7 +9,7 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import L, { type LatLngExpression } from "leaflet";
 import Box from "@mui/material/Box";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as turf from "@turf/turf";
 import { request } from "../utils/api";
 import { useGetGeofence } from "../queries/geofence";
@@ -21,6 +21,8 @@ import {
   faFloppyDisk,
   faCircleLeft,
 } from "@fortawesome/free-solid-svg-icons";
+import { getInitialDeviceData } from "../utils/getInitialDeviceData";
+import { useDevicesPooling } from "../queries/devices";
 
 function segmentsFromPoints(points: [number, number][]) {
   const segments: [number, number][][] = [];
@@ -56,7 +58,6 @@ const MapClickHandler = ({
   onMapClick: (lat: number, lng: number) => void;
 }) => {
   useMapEvent("click", (e) => {
-    console.log(e.latlng);
     const { lat, lng } = e.latlng;
     onMapClick(lat, lng);
   });
@@ -75,8 +76,10 @@ const blueIcon = new L.Icon({
 const Geofence: React.FC<Props> = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { deviceId, center } = location.state;
+  const { devices } = useDevicesPooling();
+
+  const { id: deviceId } = getInitialDeviceData(devices);
+
   const [fence, setFence] = useState<LatLngExpression[]>([]);
 
   const { data } = useGetGeofence(deviceId);
@@ -134,11 +137,13 @@ const Geofence: React.FC<Props> = () => {
     },
   ];
 
+  const mapCenter = JSON.parse(localStorage.getItem("mapCenter") ?? "");
+
   useEffect(() => {
-    if (!deviceId) {
+    if (!deviceId || !mapCenter) {
       navigate("/", { replace: true });
     }
-  }, [deviceId]);
+  }, [deviceId, mapCenter]);
 
   useEffect(() => {
     if (data?.data?.coordinates) {
@@ -186,8 +191,8 @@ const Geofence: React.FC<Props> = () => {
       </Box>
       <Box className="mapWrapperGeofence">
         <MapContainer
-          center={center[0]}
-          zoom={15}
+          center={mapCenter}
+          zoom={14}
           scrollWheelZoom={true}
           style={{ height: "100%", width: "100%" }}
           zoomControl={false}
@@ -213,7 +218,7 @@ const Geofence: React.FC<Props> = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          <Marker position={center[0]} icon={blueIcon} />
+          <Marker position={mapCenter} icon={blueIcon} />
 
           {fence.length > 0 && (
             <Polygon

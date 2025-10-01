@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
-import { useGetDevices, type DeviceType } from "../../queries/devices";
+import { useGetBODevices, type DeviceType } from "../../queries/devices";
 
 interface Props {
   handleSelect: (device: DeviceType) => void;
 }
 
 const DeviceSelect: React.FC<Props> = ({ handleSelect }) => {
-  const { data } = useGetDevices();
+  const { data } = useGetBODevices();
 
   useEffect(() => {
     if (data?.data.length) {

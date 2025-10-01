@@ -4,6 +4,7 @@ import DevicesSelect from "../DevicesSelect";
 import { useDevicesPooling, type DeviceType } from "../queries/devices";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignalPerfect } from "@fortawesome/free-solid-svg-icons";
+import { getInitialDeviceData } from "../utils/getInitialDeviceData";
 
 interface Props {
   selectDevice: (imei: string) => void;
@@ -16,23 +17,8 @@ const TopNav: React.FC<Props> = ({ selectDevice }) => {
   >();
 
   useEffect(() => {
-    if (!devices?.length) {
-      return;
-    }
-
-    const id = localStorage.getItem("selectedDeviceId");
-
-    if (!id) {
-      setSelectedDevice(devices[0]);
-    }
-
-    const device = devices.find((d) => d.imei === id);
-
-    if (device) {
-      setSelectedDevice(device);
-    } else {
-      setSelectedDevice(devices[0]);
-    }
+    const { device } = getInitialDeviceData(devices);
+    setSelectedDevice(device);
   }, [devices]);
 
   const handleSelect = (id: string) => {
