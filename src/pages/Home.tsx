@@ -1,16 +1,10 @@
 import type { FC } from "react";
-
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import { type LatLngExpression } from "leaflet";
-import { getRelativeTime } from "../utils/getDisplayDate";
-// import DevicesSelect from "../DevicesSelect";
-// import DeviceSettings from "../DeviceSettings";
 import SideBanner from "../SideBanner";
-// import AccountMenu from "../AccountMenu";
 import { useDevicesPooling } from "../queries/devices";
 import { useGetRoute } from "../queries/route";
-import CommandCenter from "../components/CommandCenter";
 import Loading from "../components/Loading";
 import NavDrawer from "../components/NavDrawer";
 import HomeMap from "../components/home/Map";
@@ -18,6 +12,7 @@ import TopNav from "../components/TopNav";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useTranslation } from "react-i18next";
+import { getInitialDeviceData } from "../utils/getInitialDeviceData";
 
 interface Props {}
 
@@ -25,9 +20,7 @@ const Home: FC<Props> = () => {
   const { t } = useTranslation();
 
   const [route, setRoute] = useState<LatLngExpression[]>([]);
-  const [deviceId, setDeviceId] = useState<string>(
-    localStorage.getItem("selectedDeviceId") ?? ""
-  );
+  const [deviceId, setDeviceId] = useState<string>("");
   const [showRoute, setShowRoute] = useState<boolean>(
     !!localStorage.getItem("showRoute")
   );
@@ -37,15 +30,23 @@ const Home: FC<Props> = () => {
   const { devices } = useDevicesPooling();
 
   useEffect(() => {
-    if (devices?.length && !deviceId) {
-      setDeviceId(devices[0]?.imei);
-    }
+    const { id } = getInitialDeviceData(devices);
+    setDeviceId(id);
   }, [devices]);
 
   useEffect(() => {
     if (routeData?.data) {
+      if (!routeData?.data?.length) {
+        localStorage.removeItem("mapCenter");
+      }
       setRoute(() =>
-        routeData?.data?.map((item) => {
+        routeData?.data?.map((item, i) => {
+          if (!i) {
+            localStorage.setItem(
+              "mapCenter",
+              JSON.stringify([item.lat, item.long])
+            );
+          }
           return [item.lat, item.long];
         })
       );
@@ -125,7 +126,7 @@ const Home: FC<Props> = () => {
           />
         )}
       </div>
-      <div className="devicesCardWrapper">
+      {/* <div className="devicesCardWrapper">
         {devices?.map((item) => (
           <div
             key={item.id}
@@ -166,8 +167,8 @@ const Home: FC<Props> = () => {
             <div style={{ padding: "8px", marginTop: "6px" }}></div>
           </div>
         ))}
-      </div>
-      <NavDrawer deviceId={deviceId} center={route?.slice(0, 1)} />
+      </div> */}
+      <NavDrawer deviceId={deviceId} />
     </Box>
   );
 };

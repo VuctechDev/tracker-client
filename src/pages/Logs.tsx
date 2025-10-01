@@ -1,6 +1,7 @@
 import { useEffect, useState, type FC } from "react";
 import { request } from "../utils/api";
 import { useDevicesPooling } from "../queries/devices";
+import { getInitialDeviceData } from "../utils/getInitialDeviceData";
 
 interface Props {}
 
@@ -16,14 +17,17 @@ const Logs: FC<Props> = () => {
     }[]
   >([]);
   const { devices } = useDevicesPooling();
-  const [imei, setImei] = useState(
-    localStorage.getItem("selectedDeviceId") ?? devices?.[0]?.imei
-  );
+  const [imei, setImei] = useState("");
 
   const getLogs = async () => {
     const data = await request(`/logs/${imei}`);
     setLogs(data.data);
   };
+
+  useEffect(() => {
+    const { id } = getInitialDeviceData(devices);
+    setImei(id);
+  }, [devices]);
 
   useEffect(() => {
     if (imei) {

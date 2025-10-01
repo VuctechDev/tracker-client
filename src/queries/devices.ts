@@ -42,6 +42,18 @@ export const useDevicesPooling = () => {
 };
 
 export const useGetDevices = () => {
+  const query = useQuery({
+    queryKey: ["devices"],
+    queryFn: () => request(`/devices`) as Promise<{ data: DeviceType[] }>,
+  });
+
+  return {
+    ...query,
+    devices: query.data?.data ?? ([] as DeviceType[]),
+  };
+};
+
+export const useGetBODevices = () => {
   return useQuery({
     queryKey: ["bo_devices"],
     queryFn: () => request(`/bo/devices`) as Promise<{ data: DeviceType[] }>,
@@ -53,8 +65,8 @@ export const useUpdateDeviceName = () => {
 
   return useMutation({
     mutationKey: ["devices", "updateName"],
-    mutationFn: ({ id, name }: { id: number; name: string }) =>
-      request(`/devices/${id}`, "PATCH", { name }) as Promise<any>,
+    mutationFn: ({ imei, name }: { imei: string; name: string }) =>
+      request(`/devices/${imei}`, "PATCH", { name }) as Promise<any>,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["devices"] });
     },

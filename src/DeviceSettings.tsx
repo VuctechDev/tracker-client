@@ -18,23 +18,27 @@ import {
   type DeviceType,
 } from "./queries/devices";
 import { useNavigate } from "react-router-dom";
-import type { LatLngExpression } from "leaflet";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPenToSquare,
+  faCopy,
+  faCheck,
+} from "@fortawesome/free-solid-svg-icons";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   deviceId: string;
-  center?: LatLngExpression[];
 }
 
-const DeviceSettings: React.FC<Props> = ({ deviceId, center }) => {
+const DeviceSettings: React.FC<Props> = ({ deviceId }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { devices } = useDevicesPooling();
   const [open, setOpen] = useState<boolean>(false);
+  const [copied, setCopied] = useState(false);
+
   const [previewInterval, setPreviewInterval] = useState<string>(
     localStorage.getItem("routePreviewInterval") ?? "3"
   );
@@ -51,6 +55,16 @@ const DeviceSettings: React.FC<Props> = ({ deviceId, center }) => {
 
   const device = devices.find((d) => d.imei === deviceId) ?? ({} as DeviceType);
 
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(device?.imei);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // reset posle 2s
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
+  };
+
   const handleDialog = () => setOpen((prev) => !prev);
 
   const handleNameChange = (
@@ -62,7 +76,7 @@ const DeviceSettings: React.FC<Props> = ({ deviceId, center }) => {
 
   const handleUpdate = async () => {
     try {
-      await mutateAsync({ name: changedName, id: device?.id });
+      await mutateAsync({ name: changedName, imei: deviceId });
       handleDialog();
     } catch (err) {
       console.error(err);
@@ -76,6 +90,7 @@ const DeviceSettings: React.FC<Props> = ({ deviceId, center }) => {
   }, [device]);
 
   const disabled = changedName === device?.name || !changedName || isPending;
+  const mapCenter = localStorage.getItem("mapCenter");
 
   return (
     <Box
@@ -97,8 +112,20 @@ const DeviceSettings: React.FC<Props> = ({ deviceId, center }) => {
           alignItems: "center",
         }}
       >
-        <Typography>
-          <span style={{ fontWeight: 600 }}>{t("imei")}:</span> {deviceId}
+        <Typography >
+          <span style={{ fontWeight: 600, height: "22px" }}>{t("imei")}:</span> {deviceId}{" "}
+          {!copied ? (
+            <FontAwesomeIcon
+              onClick={handleCopy}
+              style={{ fontSize: "16px" }}
+              icon={faCopy}
+            />
+          ) : (
+            <FontAwesomeIcon
+              style={{ fontSize: "16px", color: "#4caf50" }}
+              icon={faCheck}
+            />
+          )}
         </Typography>
 
         <FontAwesomeIcon
@@ -117,17 +144,18 @@ const DeviceSettings: React.FC<Props> = ({ deviceId, center }) => {
           pt: "10px",
         }}
       >
-        <Button
-          variant="contained"
-          onClick={() =>
-            navigate("/geofence", {
-              state: { deviceId, center },
-              replace: true,
-            })
-          }
-        >
-          {t("geofence")}
-        </Button>
+        {mapCenter && (
+          <Button
+            variant="contained"
+            onClick={() =>
+              navigate("/geofence", {
+                replace: true,
+              })
+            }
+          >
+            {t("geofence")}
+          </Button>
+        )}
 
         <FormControl sx={{ width: { xs: 150, sm: 150 } }}>
           <InputLabel id="preview-label">{t("preview")}</InputLabel>

@@ -6,6 +6,7 @@ import {
   faRoute,
   faCropSimple,
   faLocationDot,
+  faCrosshairs,
 } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
@@ -44,6 +45,28 @@ const SideBanner: React.FC<Props> = ({
         padding: "16px 0px",
       }}
     >
+      {!!data && (
+        <Box
+          sx={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "50%",
+            backgroundColor: "#fff",
+            border: "1px solid rgb(120, 120, 120)",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            cursor: "pointer",
+          }}
+          onClick={() => window.dispatchEvent(new CustomEvent("recenterMap"))}
+        >
+          <FontAwesomeIcon
+            icon={faCrosshairs}
+            style={{ fontSize: "22px", fontWeight: 400, color: "#111827" }}
+          />
+        </Box>
+      )}
       {displayGeofenceButton && (
         <Box
           sx={{

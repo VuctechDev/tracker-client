@@ -2,7 +2,6 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import type { LatLngExpression } from "leaflet";
 import { useDevicesPooling } from "../queries/devices";
 import { getRelativeTime } from "../utils/getDisplayDate";
 import BottomNavigation from "./BottomNavigation";
@@ -12,10 +11,9 @@ import { grey } from "@mui/material/colors";
 
 interface Props {
   deviceId: string;
-  center?: LatLngExpression[];
 }
 
-const NavDrawer: React.FC<Props> = ({ deviceId, center }) => {
+const NavDrawer: React.FC<Props> = ({ deviceId }) => {
   const [screen, setScreen] = React.useState("settings");
   const { t } = useTranslation();
   const { devices } = useDevicesPooling();
@@ -38,9 +36,7 @@ const NavDrawer: React.FC<Props> = ({ deviceId, center }) => {
         borderTop: `1px solid ${grey[300]}`,
       }}
     >
-      {screen === "settings" && (
-        <DeviceSettings deviceId={deviceId} center={center} />
-      )}
+      {screen === "settings" && <DeviceSettings deviceId={deviceId} />}
       {screen === "analytics" && (
         <>
           <Box

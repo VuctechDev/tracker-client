@@ -51,16 +51,37 @@ interface Props {
 }
 
 const HomeMap: React.FC<Props> = ({ deviceId, routeData, showFence }) => {
+  const mapRef = React.useRef<L.Map | null>(null);
   const { data: geofence } = useGetGeofence(deviceId);
   const { data } = useGetRoute(deviceId);
   const { t } = useTranslation();
+
+  const recenterToLatest = React.useCallback(() => {
+    const map = mapRef.current;
+    if (!map || !routeData.length) return;
+
+    const latest = routeData[0];
+    map.flyTo(latest, Math.max(map.getZoom(), 14), { duration: 0.3 });
+  }, [routeData]);
+
+  React.useEffect(() => {
+    const handler = () => {
+      recenterToLatest();
+    };
+
+    window.addEventListener("recenterMap", handler as EventListener);
+    return () =>
+      window.removeEventListener("recenterMap", handler as EventListener);
+  }, [routeData, recenterToLatest]);
+
   return (
     <MapContainer
-      center={routeData[0] ?? [0, 0]}
-      zoom={15}
+      center={routeData[0]}
+      zoom={14}
       scrollWheelZoom={true}
       style={{ height: "100%", width: "100%" }}
       zoomControl={false}
+      ref={mapRef}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
