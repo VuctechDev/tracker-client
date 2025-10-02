@@ -44,5 +44,7 @@
   "lastNDays_few": "Zadnje {{count}} dni",
   "lastNDays_other": "Zadnjih {{count}} dni",
   "save": "Shrani",
-  "emptyMapSelectedFilter": "Za izbrani filter ni zapisov!"
+  "emptyMapSelectedFilter": "Za izbrani filter ni zapisov!",
+  "distance": "Razdalja",
+  "month": "Mesec"
 }

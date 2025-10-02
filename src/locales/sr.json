@@ -43,5 +43,7 @@
   "lastNDays_few": "Poslednja {{count}} dana",
   "lastNDays_other": "Poslednjih {{count}} dana",
   "save": "Sačuvaj",
-  "emptyMapSelectedFilter": "Trenutno nema zapisa za izabrani filter!"
+  "emptyMapSelectedFilter": "Trenutno nema zapisa za izabrani filter!",
+  "distance": "Pređeno",
+  "month": "Mjesec"
 }

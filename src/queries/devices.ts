@@ -16,12 +16,6 @@ export type DeviceType = {
   createdAt: string;
   updatedAt: string;
   organization: OrganizationType;
-  analytics: {
-    lastKilometer: string;
-    lastKilometerReachedAt: number;
-    lastHour: string;
-    last24h: string;
-  };
 };
 
 export const useDevicesPooling = () => {

@@ -42,5 +42,7 @@
   "lastNDays_one": "Letzter {{count}} Tag",
   "lastNDays_other": "Letzte {{count}} Tage",
   "save": "Speichern",
-  "emptyMapSelectedFilter": "Keine Einträge für den ausgewählten Filter verfügbar!"
+  "emptyMapSelectedFilter": "Keine Einträge für den ausgewählten Filter verfügbar!",
+  "distance": "Entfernung",
+  "month": "Monat"
 }
