@@ -6,6 +6,7 @@ import Backoffice from "../pages/Backoffice";
 import AuthLayout from "../layouts/AuthLayout";
 import Loading from "../components/Loading";
 import App2 from "../App2";
+import Analytics from "../pages/Analytics";
 
 const Geofence = lazy(() => import("../pages/Geofence2"));
 
@@ -17,11 +18,12 @@ export default function AuthRoutes() {
         <Route path="/logs" element={<Logs />} />
         <Route path="/bo" element={<Backoffice />} />
         <Route path="/app2" element={<App2 />} />
+        <Route path="/analytics" element={<Analytics />} />
 
         <Route
           path="/geofence"
           element={
-            <Suspense fallback={<Loading/>}>
+            <Suspense fallback={<Loading />}>
               <Geofence />
             </Suspense>
           }

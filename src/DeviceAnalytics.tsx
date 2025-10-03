@@ -1,24 +1,20 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { useDevicesPooling } from "./queries/devices";
-import { getInitialDeviceData } from "./utils/getInitialDeviceData";
+import { useSelectedDevice } from "./utils/getInitialDeviceData";
 import { useGetAnalytics } from "./queries/analytics";
 import DistanceLast7DaysChart from "./components/DistanceLast7DaysChart";
-import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons";
+import { faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 
 interface Props {}
 
 const DeviceAnalytics: React.FC<Props> = () => {
   const { t } = useTranslation();
-  const { devices } = useDevicesPooling();
-  const { id } = getInitialDeviceData(devices);
+  const { id } = useSelectedDevice();
   const { analytics } = useGetAnalytics(id);
-
-  const last24h = analytics?.last24h ?? 0;
-
-  const a = (last24h / analytics?.monthlyAverage) * 100;
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -28,6 +24,7 @@ const DeviceAnalytics: React.FC<Props> = () => {
         display: "flex",
         flexDirection: "column",
         px: "14px",
+        pt: "4px",
       }}
     >
       <Box
@@ -36,30 +33,18 @@ const DeviceAnalytics: React.FC<Props> = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          px: "14px",
+          px: "4px",
         }}
       >
         <Typography>
-          <span style={{ fontWeight: 600 }}>{t("24h")}:</span>{" "}
-          {(last24h / 1000)?.toFixed(2)}km
+          <span style={{ fontWeight: 600 }}>{t("24hDistance")}</span>{" "}
+          {analytics.last24hDisplayValue}
         </Typography>
-        <Typography>
-          <span style={{ fontWeight: 600 }}>
-            {t("24h")}/{t("month")}:
-          </span>{" "}
-          {a?.toFixed(1)}%
-          {a > 100 ? (
-            <FontAwesomeIcon
-              icon={faArrowUp}
-              style={{ fontSize: "14px", fontWeight: 800, color: "#4caf50" }}
-            />
-          ) : (
-            <FontAwesomeIcon
-              icon={faArrowDown}
-              style={{ fontSize: "14px", fontWeight: 800, color: "#f44336" }}
-            />
-          )}
-        </Typography>
+        <FontAwesomeIcon
+          onClick={() => navigate("/analytics")}
+          style={{ fontSize: "20px", fontWeight: 400 }}
+          icon={faFileLines}
+        />
       </Box>
       <DistanceLast7DaysChart apiData={analytics?.rows} unit="km" />
     </Box>
