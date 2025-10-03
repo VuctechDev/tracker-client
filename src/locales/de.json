@@ -44,5 +44,12 @@
   "save": "Speichern",
   "emptyMapSelectedFilter": "Keine Einträge für den ausgewählten Filter verfügbar!",
   "distance": "Entfernung",
-  "month": "Monat"
+  "month": "Monat",
+  "extremlyInactive": "Extrem inaktiv",
+  "unusualyInactive": "Ungewöhnlich inaktiv",
+  "everythingLooksFine": "Alles sieht gut aus",
+  "unusualyActive": "Ungewöhnlich aktiv",
+  "extremlyActive": "Extrem aktiv",
+  "sevenDaysDistanceChart": "Entfernungsdiagramm der letzten 7 Tage",
+  "24hPerHourChart": "Entfernung pro Stunde – letzte 24 Stunden"
 }

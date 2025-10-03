@@ -45,5 +45,12 @@
   "save": "Sačuvaj",
   "emptyMapSelectedFilter": "Trenutno nema zapisa za izabrani filter!",
   "distance": "Pređeno",
-  "month": "Mjesec"
+  "month": "Mjesec",
+  "extremlyInactive": "Ekstremno neaktivno",
+  "unusualyInactive": "Neuobičajeno neaktivno",
+  "everythingLooksFine": "Sve izgleda u redu",
+  "unusualyActive": "Neuobičajeno aktivno",
+  "extremlyActive": "Ekstremno aktivno",
+  "sevenDaysDistanceChart": "Grafikon rastojanja u poslednjih 7 dana",
+  "24hPerHourChart": "Grafikon rastojanja po satu u poslednja 24 sata"
 }
