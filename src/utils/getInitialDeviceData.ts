@@ -1,4 +1,4 @@
-import type { DeviceType } from "../queries/devices";
+import { useDevicesPooling, type DeviceType } from "../queries/devices";
 
 export const getInitialDeviceData = (devices: DeviceType[]) => {
   let id = "";
@@ -35,4 +35,9 @@ export const getInitialDeviceData = (devices: DeviceType[]) => {
     device,
     id,
   };
+};
+
+export const useSelectedDevice = () => {
+  const { devices } = useDevicesPooling();
+  return getInitialDeviceData(devices);
 };

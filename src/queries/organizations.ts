@@ -21,5 +21,7 @@ export const useGetOrganization = () => {
     queryKey: ["organization"],
     queryFn: () =>
       request(`/organizations`) as Promise<{ data: OrganizationType }>,
+    retry: false,
+  
   });
 };

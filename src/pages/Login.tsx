@@ -26,6 +26,9 @@ const LoginPage = () => {
     code.current = e.target.value;
   };
 
+  // const authCode = import.meta.env.VITE_AUTH_CODE;
+  const authCode = "";
+
   return (
     <Box
       sx={{
@@ -42,7 +45,7 @@ const LoginPage = () => {
         variant="outlined"
         label={t("password")}
         onChange={handleInput}
-        defaultValue={localStorage.getItem("code")}
+        defaultValue={authCode ?? localStorage.getItem("code")}
       />
       <Button onClick={login} variant="contained">
         {t("signIn")}

@@ -12,7 +12,6 @@ import {
 } from "recharts";
 import { useTranslation } from "react-i18next";
 
-
 type ApiRow = { day: string; totalDistance: number };
 
 type Props = {
@@ -78,14 +77,6 @@ const DistanceLast7DaysChart: React.FC<Props> = ({
               t("distance"),
             ]}
             labelFormatter={(_, payload) => payload?.[0]?.payload?.day ?? ""}
-            // contentStyle={{
-            //     border: "none",        // remove orange border
-            //     borderRadius: "8px",   // optional: rounded corners
-            //     backgroundColor: "#fff" // optional: white background
-            //   }}
-            //   itemStyle={{
-            //     color: "#3b82f6" // make the text blue if you like
-            //   }}
           />
           <Bar
             dataKey="value"
