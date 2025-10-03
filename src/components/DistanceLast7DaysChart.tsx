@@ -71,7 +71,7 @@ const DistanceLast7DaysChart: React.FC<Props> = ({
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
           <XAxis dataKey="label" />
           <YAxis hide />
-          <Tooltips
+          <Tooltip
             formatter={(v) => [
               `${numberFmt(Number(v))} ${unitSuffix}`,
               t("distance"),
