@@ -46,5 +46,12 @@
   "save": "Shrani",
   "emptyMapSelectedFilter": "Za izbrani filter ni zapisov!",
   "distance": "Razdalja",
-  "month": "Mesec"
+  "month": "Mesec",
+  "extremlyInactive": "Izjemno neaktivno",
+  "unusualyInactive": "Neobičajno neaktivno",
+  "everythingLooksFine": "Vse je v redu",
+  "unusualyActive": "Neobičajno aktivno",
+  "extremlyActive": "Izjemno aktivno",
+  "sevenDaysDistanceChart": "Graf razdalje v zadnjih 7 dneh",
+  "24hPerHourChart": "Graf razdalje na uro v zadnjih 24 urah"
 }

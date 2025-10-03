@@ -4,31 +4,24 @@ import PageLayout from "../layouts/PageLayout";
 import DemoCard from "../components/DemoCard";
 import { useGetAnalytics } from "../queries/analytics";
 import { useSelectedDevice } from "../utils/getInitialDeviceData";
-import {
-  faArrowUp,
-  faArrowDown,
-  faCircleCheck,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DistanceLast7DaysChart from "../components/DistanceLast7DaysChart";
 import { HourlyActivityChart } from "../components/HourlyActivityChart";
+import AnalyticsWarning from "../components/AnalyticsWarning";
+import { red, green } from "@mui/material/colors";
+import { useTranslation } from "react-i18next";
 
 interface Props {}
 
 const Analytics: React.FC<Props> = () => {
   const { id } = useSelectedDevice();
   const { analytics } = useGetAnalytics(id);
+  const { t } = useTranslation();
 
   return (
     <PageLayout title={"Analytics"}>
-      <Typography variant="h6" textAlign="center" mb={2}>
-        Everything looks fine{" "}
-        <FontAwesomeIcon
-          icon={faCircleCheck}
-          style={{ fontSize: "16px", fontWeight: 800, color: "#4caf50" }}
-        />
-      </Typography>
-
+      <AnalyticsWarning value={analytics.percentage} />
       <Stack direction="row" spacing={2}>
         <DemoCard title={"24h"}>
           <Typography variant="h6" textAlign="center">
@@ -41,12 +34,12 @@ const Analytics: React.FC<Props> = () => {
             {analytics.percentage > 100 ? (
               <FontAwesomeIcon
                 icon={faArrowUp}
-                style={{ fontSize: "14px", fontWeight: 800, color: "#4caf50" }}
+                style={{ fontSize: "14px", fontWeight: 800, color: green[500] }}
               />
             ) : (
               <FontAwesomeIcon
                 icon={faArrowDown}
-                style={{ fontSize: "14px", fontWeight: 800, color: "#f44336" }}
+                style={{ fontSize: "14px", fontWeight: 800, color: red[500] }}
               />
             )}
           </Typography>
@@ -58,7 +51,7 @@ const Analytics: React.FC<Props> = () => {
         </DemoCard>
       </Stack>
       <Typography variant="h6" textAlign="center" mt={3}>
-        7 days distance chart
+        {t("sevenDaysDistanceChart")}
       </Typography>
       <DistanceLast7DaysChart
         apiData={analytics?.rows}
@@ -66,7 +59,7 @@ const Analytics: React.FC<Props> = () => {
         height={160}
       />
       <Typography variant="h6" textAlign="center" mt={1} mb={1}>
-        Last 24h distance per hour chart
+        {t("24hPerHourChart")}
       </Typography>
       <HourlyActivityChart data={analytics.hourly} />
     </PageLayout>

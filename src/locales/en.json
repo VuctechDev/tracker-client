@@ -43,6 +43,13 @@
   "lastNDays_other": "Last {{count}} days",
   "save": "Save",
   "emptyMapSelectedFilter": "No records available for the selected filter!",
-  "distance": "Distance", 
-  "month": "Month"
+  "distance": "Distance",
+  "month": "Month",
+  "extremlyInactive": "Extremly inactive",
+  "unusualyInactive": "Unusualy inactive",
+  "everythingLooksFine": "Everything looks fine",
+  "unusualyActive": "Unusualy active",
+  "extremlyActive": "Extremly active",
+  "sevenDaysDistanceChart": "7 days distance chart",
+  "24hPerHourChart": "Last 24h distance per hour chart"
 }
