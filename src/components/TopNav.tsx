@@ -28,7 +28,7 @@ const TopNav: React.FC<Props> = ({ selectDevice }) => {
 
   return (
     <Box
-      sx={{
+      sx={(theme) => ({
         backgroundColor: "#fff",
         width: "100%",
         height: "50px",
@@ -36,10 +36,13 @@ const TopNav: React.FC<Props> = ({ selectDevice }) => {
         top: 0,
         left: 0,
         zIndex: 10,
-        display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-      }}
+        display: "none",
+        [theme.breakpoints.down("md")]: {
+          display: "flex",
+        },
+      })}
     >
       <DevicesSelect onSelect={handleSelect} selectedDevice={selectedDevice} />
       <Box

@@ -1,5 +1,6 @@
 import { useEffect, useState, type FC } from "react";
 import { request } from "../utils/api";
+import { getDisplayDateTime } from "../utils/getDisplayDate";
 import { useDevicesPooling } from "../queries/devices";
 import { getInitialDeviceData } from "../utils/getInitialDeviceData";
 
@@ -48,8 +49,8 @@ const Logs: FC<Props> = () => {
       <h2>Logs for IMEI: {imei}</h2>
       {logs.map((log) => (
         <div key={log.id}>
-          {log.createdAt}: PROTOCOL: {log.protocol}, RECEIVED: {log.received},
-          ACK: {log.ack}
+          [{getDisplayDateTime(log.createdAt)}]: PROTOCOL: {log.protocol},
+          RECEIVED: {log.received}, ACK: {log.ack}
         </div>
       ))}
     </div>
