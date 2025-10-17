@@ -14,6 +14,7 @@ export default function AuthLayout() {
       >
         <Link to="/">{t("home")}</Link>
         <Link to="/logs">{t("logs")}</Link>
+        <Link to="/health">{t("health")}</Link>
         <Box
           width={1}
           sx={{

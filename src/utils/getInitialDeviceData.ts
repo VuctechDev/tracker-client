@@ -34,6 +34,7 @@ export const getInitialDeviceData = (devices: DeviceType[]) => {
   return {
     device,
     id,
+    devices,
   };
 };
 

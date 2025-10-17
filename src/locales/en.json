@@ -51,5 +51,6 @@
   "unusualyActive": "Unusualy active",
   "extremlyActive": "Extremly active",
   "sevenDaysDistanceChart": "7 days distance chart",
-  "24hPerHourChart": "Last 24h distance per hour chart"
+  "24hPerHourChart": "Last 24h distance per hour chart",
+  "health": "Health"
 }

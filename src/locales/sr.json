@@ -47,10 +47,11 @@
   "distance": "Pređeno",
   "month": "Mjesec",
   "extremlyInactive": "Ekstremno neaktivno",
-  "unusualyInactive": "Neuobičajeno neaktivno",
+  "unusualyInactive": "Neuobičajno neaktivno",
   "everythingLooksFine": "Sve izgleda u redu",
-  "unusualyActive": "Neuobičajeno aktivno",
+  "unusualyActive": "Neuobičajno aktivno",
   "extremlyActive": "Ekstremno aktivno",
   "sevenDaysDistanceChart": "Grafikon rastojanja u poslednjih 7 dana",
-  "24hPerHourChart": "Grafikon rastojanja po satu u poslednja 24 sata"
+  "24hPerHourChart": "Grafikon rastojanja po satu u poslednja 24 sata",
+  "health": "Zdravlje"
 }

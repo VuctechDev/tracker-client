@@ -21,7 +21,7 @@ const Analytics: React.FC<Props> = () => {
 
   return (
     <PageLayout title={"Analytics"}>
-      <AnalyticsWarning value={analytics.percentage} />
+      <AnalyticsWarning value={100} />
       <Stack direction="row" spacing={2}>
         <DemoCard title={"24h"}>
           <Typography variant="h6" textAlign="center">
