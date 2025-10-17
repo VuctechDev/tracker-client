@@ -26,9 +26,11 @@ const Logs: FC<Props> = () => {
   };
 
   useEffect(() => {
-    const { id } = getInitialDeviceData(devices);
-    setImei(id);
-  }, [devices]);
+    if (!imei) {
+      const { id } = getInitialDeviceData(devices);
+      setImei(id);
+    }
+  }, [devices, imei]);
 
   useEffect(() => {
     if (imei) {

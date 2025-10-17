@@ -12,9 +12,11 @@ const Health: React.FC<Props> = () => {
   const { health } = useGetHealth(imei);
 
   useEffect(() => {
-    const { id } = getInitialDeviceData(devices ?? []);
-    setImei(id);
-  }, [devices]);
+    if (!imei) {
+      const { id } = getInitialDeviceData(devices ?? []);
+      setImei(id);
+    }
+  }, [devices, imei]);
 
   return (
     <div style={{ minHeight: "100vh" }}>
